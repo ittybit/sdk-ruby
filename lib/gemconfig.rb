@@ -7,8 +7,8 @@ module Ittybit
     EMAIL = ""
     SUMMARY = ""
     DESCRIPTION = ""
-    HOMEPAGE = "https://github.com/fern-demo/ittybit-ruby-sdk"
-    SOURCE_CODE_URI = "https://github.com/fern-demo/ittybit-ruby-sdk"
-    CHANGELOG_URI = "https://github.com/fern-demo/ittybit-ruby-sdk/blob/master/CHANGELOG.md"
+    HOMEPAGE = "https://github.com/ittybit/sdk-ruby"
+    SOURCE_CODE_URI = "https://github.com/ittybit/sdk-ruby"
+    CHANGELOG_URI = "https://github.com/ittybit/sdk-ruby/blob/master/CHANGELOG.md"
   end
 end
