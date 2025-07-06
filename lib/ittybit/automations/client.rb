@@ -126,12 +126,16 @@ module Ittybit
     #   * :conditions (Array<Ittybit::Automations::AutomationsUpdateRequestTriggerConditionsItem>)
     # @param workflow [Array<Hash>] The updated sequence of tasks for the automation.Request of type Array<Ittybit::WorkflowTaskStep>, as a Hash
     #   * :kind (Ittybit::WorkflowTaskStepKind)
-    #   * :label (String)
+    #   * :ref (String)
     #   * :format (String)
+    #   * :start (Float)
+    #   * :end_ (Float)
     #   * :width (Integer)
     #   * :height (Integer)
-    #   * :resize (String)
+    #   * :fit (String)
+    #   * :background (String)
     #   * :quality (Integer)
+    #   * :next_ (Array<Object>)
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::AutomationResponse]
     # @example
@@ -144,7 +148,7 @@ module Ittybit
     #    id: "id",
     #    name: "Updated Transcoder Example",
     #    trigger: { event: "upload.completed", conditions: [{ prop: "file.type", value: "image/*" }] },
-    #    workflow: [{ kind: IMAGE, label: "archive_image", format: "webp" }]
+    #    workflow: [{ kind: IMAGE, format: "webp" }]
     #  )
     def update(id:, name:, description: nil, trigger: nil, workflow: nil, request_options: nil)
       response = @request_client.conn.put do |req|
@@ -328,12 +332,16 @@ module Ittybit
     #   * :conditions (Array<Ittybit::Automations::AutomationsUpdateRequestTriggerConditionsItem>)
     # @param workflow [Array<Hash>] The updated sequence of tasks for the automation.Request of type Array<Ittybit::WorkflowTaskStep>, as a Hash
     #   * :kind (Ittybit::WorkflowTaskStepKind)
-    #   * :label (String)
+    #   * :ref (String)
     #   * :format (String)
+    #   * :start (Float)
+    #   * :end_ (Float)
     #   * :width (Integer)
     #   * :height (Integer)
-    #   * :resize (String)
+    #   * :fit (String)
+    #   * :background (String)
     #   * :quality (Integer)
+    #   * :next_ (Array<Object>)
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::AutomationResponse]
     # @example
@@ -346,7 +354,7 @@ module Ittybit
     #    id: "id",
     #    name: "Updated Transcoder Example",
     #    trigger: { event: "upload.completed", conditions: [{ prop: "file.type", value: "image/*" }] },
-    #    workflow: [{ kind: IMAGE, label: "archive_image", format: "webp" }]
+    #    workflow: [{ kind: IMAGE, format: "webp" }]
     #  )
     def update(id:, name:, description: nil, trigger: nil, workflow: nil, request_options: nil)
       Async do

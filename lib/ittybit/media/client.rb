@@ -17,9 +17,9 @@ module Ittybit
       @request_client = request_client
     end
 
-    # Retrieves a list of all media for the current project
+    # Retrieves a paginated list of all media for the current project
     #
-    # @param limit [Integer] Number of media items to return per page.
+    # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::MediaListResponse]
     # @example
@@ -48,10 +48,11 @@ module Ittybit
       Ittybit::MediaListResponse.from_json(json_object: response.body)
     end
 
-    # Creates a new media item from a URL or as an empty placeholder
+    # Creates a new media item.
     #
-    # @param title [String] Title for the media
-    # @param metadata [Hash{String => Object}] Additional metadata for the media
+    # @param title [String]
+    # @param alt [String]
+    # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::MediaResponse]
     # @example
@@ -60,8 +61,12 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.media.create(metadata: { "credit": "gtv-videos-bucket" })
-    def create(title: nil, metadata: nil, request_options: nil)
+    #  api.media.create(
+    #    title: "My Video Example",
+    #    alt: "An example video used to demonstrate the ittybit API",
+    #    metadata: { "customKey2": "a different custom value" }
+    #  )
+    def create(title: nil, alt: nil, metadata: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
@@ -74,13 +79,18 @@ module Ittybit
         unless request_options.nil? || request_options&.additional_query_parameters.nil?
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
         end
-        req.body = { **(request_options&.additional_body_parameters || {}), title: title, metadata: metadata }.compact
+        req.body = {
+          **(request_options&.additional_body_parameters || {}),
+          title: title,
+          alt: alt,
+          metadata: metadata
+        }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/media"
       end
       Ittybit::MediaResponse.from_json(json_object: response.body)
     end
 
-    # Retrieves a specific media item by its ID
+    # Retrieves the media object for a media with the given ID.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
@@ -113,7 +123,8 @@ module Ittybit
       Ittybit::MediaResponse.from_json(json_object: response.body)
     end
 
-    # Deletes a specific media item by its ID
+    # Permanently removes a media object from the system. This action cannot be
+    #  undone.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
@@ -146,12 +157,13 @@ module Ittybit
       Ittybit::ConfirmationResponse.from_json(json_object: response.body)
     end
 
-    # Updates specific fields of a media item by its ID. Only the fields provided in
-    #  the request body will be updated.
+    # Updates a media object's `title`, `alt`, or `metadata`. Only the specified
+    #  fields will be updated.
     #
     # @param id [String]
-    # @param title [String] New title for the media item.
-    # @param metadata [Hash{String => Object}] New metadata object for the media item. This will replace the existing metadata.
+    # @param title [String]
+    # @param alt [String]
+    # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::MediaResponse]
     # @example
@@ -160,8 +172,13 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.media.update(id: "id")
-    def update(id:, title: nil, metadata: nil, request_options: nil)
+    #  api.media.update(
+    #    id: "id",
+    #    title: "Updated Video Example",
+    #    alt: "An updated example video used to demonstrate the ittybit API",
+    #    metadata: { "customKey2": "a different custom value" }
+    #  )
+    def update(id:, title: nil, alt: nil, metadata: nil, request_options: nil)
       response = @request_client.conn.patch do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
@@ -174,7 +191,12 @@ module Ittybit
         unless request_options.nil? || request_options&.additional_query_parameters.nil?
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
         end
-        req.body = { **(request_options&.additional_body_parameters || {}), title: title, metadata: metadata }.compact
+        req.body = {
+          **(request_options&.additional_body_parameters || {}),
+          title: title,
+          alt: alt,
+          metadata: metadata
+        }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/media/#{id}"
       end
       Ittybit::MediaResponse.from_json(json_object: response.body)
@@ -191,9 +213,9 @@ module Ittybit
       @request_client = request_client
     end
 
-    # Retrieves a list of all media for the current project
+    # Retrieves a paginated list of all media for the current project
     #
-    # @param limit [Integer] Number of media items to return per page.
+    # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::MediaListResponse]
     # @example
@@ -224,10 +246,11 @@ module Ittybit
       end
     end
 
-    # Creates a new media item from a URL or as an empty placeholder
+    # Creates a new media item.
     #
-    # @param title [String] Title for the media
-    # @param metadata [Hash{String => Object}] Additional metadata for the media
+    # @param title [String]
+    # @param alt [String]
+    # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::MediaResponse]
     # @example
@@ -236,8 +259,12 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.media.create(metadata: { "credit": "gtv-videos-bucket" })
-    def create(title: nil, metadata: nil, request_options: nil)
+    #  api.media.create(
+    #    title: "My Video Example",
+    #    alt: "An example video used to demonstrate the ittybit API",
+    #    metadata: { "customKey2": "a different custom value" }
+    #  )
+    def create(title: nil, alt: nil, metadata: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -251,14 +278,19 @@ module Ittybit
           unless request_options.nil? || request_options&.additional_query_parameters.nil?
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
           end
-          req.body = { **(request_options&.additional_body_parameters || {}), title: title, metadata: metadata }.compact
+          req.body = {
+            **(request_options&.additional_body_parameters || {}),
+            title: title,
+            alt: alt,
+            metadata: metadata
+          }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/media"
         end
         Ittybit::MediaResponse.from_json(json_object: response.body)
       end
     end
 
-    # Retrieves a specific media item by its ID
+    # Retrieves the media object for a media with the given ID.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
@@ -293,7 +325,8 @@ module Ittybit
       end
     end
 
-    # Deletes a specific media item by its ID
+    # Permanently removes a media object from the system. This action cannot be
+    #  undone.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
@@ -328,12 +361,13 @@ module Ittybit
       end
     end
 
-    # Updates specific fields of a media item by its ID. Only the fields provided in
-    #  the request body will be updated.
+    # Updates a media object's `title`, `alt`, or `metadata`. Only the specified
+    #  fields will be updated.
     #
     # @param id [String]
-    # @param title [String] New title for the media item.
-    # @param metadata [Hash{String => Object}] New metadata object for the media item. This will replace the existing metadata.
+    # @param title [String]
+    # @param alt [String]
+    # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::MediaResponse]
     # @example
@@ -342,8 +376,13 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.media.update(id: "id")
-    def update(id:, title: nil, metadata: nil, request_options: nil)
+    #  api.media.update(
+    #    id: "id",
+    #    title: "Updated Video Example",
+    #    alt: "An updated example video used to demonstrate the ittybit API",
+    #    metadata: { "customKey2": "a different custom value" }
+    #  )
+    def update(id:, title: nil, alt: nil, metadata: nil, request_options: nil)
       Async do
         response = @request_client.conn.patch do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -357,7 +396,12 @@ module Ittybit
           unless request_options.nil? || request_options&.additional_query_parameters.nil?
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
           end
-          req.body = { **(request_options&.additional_body_parameters || {}), title: title, metadata: metadata }.compact
+          req.body = {
+            **(request_options&.additional_body_parameters || {}),
+            title: title,
+            alt: alt,
+            metadata: metadata
+          }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/media/#{id}"
         end
         Ittybit::MediaResponse.from_json(json_object: response.body)

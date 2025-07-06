@@ -2,6 +2,7 @@
 
 require_relative "media_source_object"
 require_relative "media_source_kind"
+require_relative "media_source_orientation"
 require "date"
 require_relative "media_source_status"
 require "ostruct"
@@ -9,56 +10,55 @@ require "json"
 
 module Ittybit
   class MediaSource
-    # @return [String] Unique identifier for the file.
+    # @return [String]
     attr_reader :id
-    # @return [Ittybit::MediaSourceObject] Object type
+    # @return [Ittybit::MediaSourceObject]
     attr_reader :object
-    # @return [Ittybit::MediaSourceKind] The general type of media.
+    # @return [Ittybit::MediaSourceKind]
     attr_reader :kind
-    # @return [String] MIME type.
+    # @return [String]
     attr_reader :type
-    # @return [String] Codec of the file.
+    # @return [String]
     attr_reader :codec
-    # @return [String] Container of the file.
+    # @return [String]
     attr_reader :container
-    # @return [Integer] Width in pixels (for image/video).
+    # @return [Integer]
     attr_reader :width
-    # @return [Integer] Height in pixels (for image/video).
+    # @return [Integer]
     attr_reader :height
-    # @return [String] Orientation of the file.
+    # @return [Ittybit::MediaSourceOrientation]
     attr_reader :orientation
-    # @return [Float] Rotation value for image files with embedded EXIF data.
+    # @return [Float]
     attr_reader :rotation
-    # @return [Boolean] Indicates if the file has alpha channel.
+    # @return [Boolean]
     attr_reader :transparency
-    # @return [Integer] Number of frames in the file.
+    # @return [Integer]
     attr_reader :frames
-    # @return [Float] Duration in seconds (for audio/video).
+    # @return [Float]
     attr_reader :duration
-    # @return [Float] Frames per second (for video).
+    # @return [Float]
     attr_reader :fps
-    # @return [Integer] File size in bytes.
+    # @return [Integer]
     attr_reader :filesize
-    # @return [Integer] Bitrate for audio/video files.
+    # @return [Integer]
     attr_reader :bitrate
-    # @return [String] Optional reference value. If set, the file URL will be included in the parent
-    #  media `urls` object.
+    # @return [String]
     attr_reader :ref
-    # @return [String] The folder path where the file is stored.
+    # @return [String]
     attr_reader :folder
-    # @return [String] The name of the file.
+    # @return [String]
     attr_reader :filename
-    # @return [String] Publicly accessible URL for the file.
+    # @return [String]
     attr_reader :url
-    # @return [Hash{String => Object}] User-defined key-value metadata.
+    # @return [Hash{String => Object}]
     attr_reader :metadata
-    # @return [Boolean] Indicates this is the original file rather than a variant.
+    # @return [Boolean]
     attr_reader :original
-    # @return [DateTime] Timestamp when the file record was created.
+    # @return [DateTime]
     attr_reader :created
-    # @return [DateTime] Timestamp when the file record was last updated.
+    # @return [DateTime]
     attr_reader :updated
-    # @return [Ittybit::MediaSourceStatus] Processing status of the file.
+    # @return [Ittybit::MediaSourceStatus]
     attr_reader :status
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -68,32 +68,31 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param id [String] Unique identifier for the file.
-    # @param object [Ittybit::MediaSourceObject] Object type
-    # @param kind [Ittybit::MediaSourceKind] The general type of media.
-    # @param type [String] MIME type.
-    # @param codec [String] Codec of the file.
-    # @param container [String] Container of the file.
-    # @param width [Integer] Width in pixels (for image/video).
-    # @param height [Integer] Height in pixels (for image/video).
-    # @param orientation [String] Orientation of the file.
-    # @param rotation [Float] Rotation value for image files with embedded EXIF data.
-    # @param transparency [Boolean] Indicates if the file has alpha channel.
-    # @param frames [Integer] Number of frames in the file.
-    # @param duration [Float] Duration in seconds (for audio/video).
-    # @param fps [Float] Frames per second (for video).
-    # @param filesize [Integer] File size in bytes.
-    # @param bitrate [Integer] Bitrate for audio/video files.
-    # @param ref [String] Optional reference value. If set, the file URL will be included in the parent
-    #  media `urls` object.
-    # @param folder [String] The folder path where the file is stored.
-    # @param filename [String] The name of the file.
-    # @param url [String] Publicly accessible URL for the file.
-    # @param metadata [Hash{String => Object}] User-defined key-value metadata.
-    # @param original [Boolean] Indicates this is the original file rather than a variant.
-    # @param created [DateTime] Timestamp when the file record was created.
-    # @param updated [DateTime] Timestamp when the file record was last updated.
-    # @param status [Ittybit::MediaSourceStatus] Processing status of the file.
+    # @param id [String]
+    # @param object [Ittybit::MediaSourceObject]
+    # @param kind [Ittybit::MediaSourceKind]
+    # @param type [String]
+    # @param codec [String]
+    # @param container [String]
+    # @param width [Integer]
+    # @param height [Integer]
+    # @param orientation [Ittybit::MediaSourceOrientation]
+    # @param rotation [Float]
+    # @param transparency [Boolean]
+    # @param frames [Integer]
+    # @param duration [Float]
+    # @param fps [Float]
+    # @param filesize [Integer]
+    # @param bitrate [Integer]
+    # @param ref [String]
+    # @param folder [String]
+    # @param filename [String]
+    # @param url [String]
+    # @param metadata [Hash{String => Object}]
+    # @param original [Boolean]
+    # @param created [DateTime]
+    # @param updated [DateTime]
+    # @param status [Ittybit::MediaSourceStatus]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::MediaSource]
     def initialize(id:, object:, kind:, type:, filesize:, url:, created:, updated:, status:, codec: OMIT, container: OMIT, width: OMIT, height: OMIT,
@@ -239,7 +238,7 @@ module Ittybit
       obj.container&.is_a?(String) != false || raise("Passed value for field obj.container is not the expected type, validation failed.")
       obj.width&.is_a?(Integer) != false || raise("Passed value for field obj.width is not the expected type, validation failed.")
       obj.height&.is_a?(Integer) != false || raise("Passed value for field obj.height is not the expected type, validation failed.")
-      obj.orientation&.is_a?(String) != false || raise("Passed value for field obj.orientation is not the expected type, validation failed.")
+      obj.orientation&.is_a?(Ittybit::MediaSourceOrientation) != false || raise("Passed value for field obj.orientation is not the expected type, validation failed.")
       obj.rotation&.is_a?(Float) != false || raise("Passed value for field obj.rotation is not the expected type, validation failed.")
       obj.transparency&.is_a?(Boolean) != false || raise("Passed value for field obj.transparency is not the expected type, validation failed.")
       obj.frames&.is_a?(Integer) != false || raise("Passed value for field obj.frames is not the expected type, validation failed.")

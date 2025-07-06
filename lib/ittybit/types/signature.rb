@@ -5,19 +5,19 @@ require "json"
 
 module Ittybit
   class Signature
-    # @return [String] Domain of the signed URL
+    # @return [String]
     attr_reader :domain
-    # @return [String] Filename of the signed file
+    # @return [String]
     attr_reader :filename
-    # @return [String] Folder of the signed file
+    # @return [String]
     attr_reader :folder
-    # @return [Integer] Expiry timestamp of the signed URL
+    # @return [Integer]
     attr_reader :expiry
-    # @return [String] HTTP method for the signed URL
+    # @return [String]
     attr_reader :method
-    # @return [String] Generated signature for the signed URL
+    # @return [String]
     attr_reader :signature
-    # @return [String] Generated signed URL
+    # @return [String]
     attr_reader :url
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -27,13 +27,13 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param domain [String] Domain of the signed URL
-    # @param filename [String] Filename of the signed file
-    # @param folder [String] Folder of the signed file
-    # @param expiry [Integer] Expiry timestamp of the signed URL
-    # @param method [String] HTTP method for the signed URL
-    # @param signature [String] Generated signature for the signed URL
-    # @param url [String] Generated signed URL
+    # @param domain [String]
+    # @param filename [String]
+    # @param folder [String]
+    # @param expiry [Integer]
+    # @param method [String]
+    # @param signature [String]
+    # @param url [String]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::Signature]
     def initialize(domain:, filename:, expiry:, method:, signature:, url:, folder: OMIT, additional_properties: nil)

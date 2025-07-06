@@ -4,7 +4,7 @@ require "ostruct"
 require "json"
 
 module Ittybit
-  class ConfirmationResponseData
+  class Confirmation
     # @return [String]
     attr_reader :message
     # @return [OpenStruct] Additional properties unmapped to the current class definition
@@ -17,17 +17,19 @@ module Ittybit
 
     # @param message [String]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [Ittybit::ConfirmationResponseData]
-    def initialize(message:, additional_properties: nil)
-      @message = message
+    # @return [Ittybit::Confirmation]
+    def initialize(message: OMIT, additional_properties: nil)
+      @message = message if message != OMIT
       @additional_properties = additional_properties
-      @_field_set = { "message": message }
+      @_field_set = { "message": message }.reject do |_k, v|
+        v == OMIT
+      end
     end
 
-    # Deserialize a JSON object to an instance of ConfirmationResponseData
+    # Deserialize a JSON object to an instance of Confirmation
     #
     # @param json_object [String]
-    # @return [Ittybit::ConfirmationResponseData]
+    # @return [Ittybit::Confirmation]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
@@ -35,7 +37,7 @@ module Ittybit
       new(message: message, additional_properties: struct)
     end
 
-    # Serialize an instance of ConfirmationResponseData to a JSON object
+    # Serialize an instance of Confirmation to a JSON object
     #
     # @return [String]
     def to_json(*_args)
@@ -49,7 +51,7 @@ module Ittybit
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.message.is_a?(String) != false || raise("Passed value for field obj.message is not the expected type, validation failed.")
+      obj.message&.is_a?(String) != false || raise("Passed value for field obj.message is not the expected type, validation failed.")
     end
   end
 end

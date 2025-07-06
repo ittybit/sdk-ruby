@@ -6,20 +6,28 @@ require "json"
 
 module Ittybit
   class WorkflowTaskStep
-    # @return [Ittybit::WorkflowTaskStepKind] The type of operation the task performs.
+    # @return [Ittybit::WorkflowTaskStepKind]
     attr_reader :kind
-    # @return [String] Optional label for the output of this step.
-    attr_reader :label
-    # @return [String] Output format (e.g., mp4, jpg)
+    # @return [String]
+    attr_reader :ref
+    # @return [String]
     attr_reader :format
-    # @return [Integer] Output width
+    # @return [Float]
+    attr_reader :start
+    # @return [Float]
+    attr_reader :end_
+    # @return [Integer]
     attr_reader :width
-    # @return [Integer] Output height
+    # @return [Integer]
     attr_reader :height
-    # @return [String] Resize mode
-    attr_reader :resize
-    # @return [Integer] Quality setting
+    # @return [String]
+    attr_reader :fit
+    # @return [String]
+    attr_reader :background
+    # @return [Integer]
     attr_reader :quality
+    # @return [Array<Object>]
+    attr_reader :next_
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -28,33 +36,45 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param kind [Ittybit::WorkflowTaskStepKind] The type of operation the task performs.
-    # @param label [String] Optional label for the output of this step.
-    # @param format [String] Output format (e.g., mp4, jpg)
-    # @param width [Integer] Output width
-    # @param height [Integer] Output height
-    # @param resize [String] Resize mode
-    # @param quality [Integer] Quality setting
+    # @param kind [Ittybit::WorkflowTaskStepKind]
+    # @param ref [String]
+    # @param format [String]
+    # @param start [Float]
+    # @param end_ [Float]
+    # @param width [Integer]
+    # @param height [Integer]
+    # @param fit [String]
+    # @param background [String]
+    # @param quality [Integer]
+    # @param next_ [Array<Object>]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::WorkflowTaskStep]
-    def initialize(kind:, label: OMIT, format: OMIT, width: OMIT, height: OMIT, resize: OMIT, quality: OMIT,
-                   additional_properties: nil)
+    def initialize(kind:, ref: OMIT, format: OMIT, start: OMIT, end_: OMIT, width: OMIT, height: OMIT, fit: OMIT,
+                   background: OMIT, quality: OMIT, next_: OMIT, additional_properties: nil)
       @kind = kind
-      @label = label if label != OMIT
+      @ref = ref if ref != OMIT
       @format = format if format != OMIT
+      @start = start if start != OMIT
+      @end_ = end_ if end_ != OMIT
       @width = width if width != OMIT
       @height = height if height != OMIT
-      @resize = resize if resize != OMIT
+      @fit = fit if fit != OMIT
+      @background = background if background != OMIT
       @quality = quality if quality != OMIT
+      @next_ = next_ if next_ != OMIT
       @additional_properties = additional_properties
       @_field_set = {
         "kind": kind,
-        "label": label,
+        "ref": ref,
         "format": format,
+        "start": start,
+        "end": end_,
         "width": width,
         "height": height,
-        "resize": resize,
-        "quality": quality
+        "fit": fit,
+        "background": background,
+        "quality": quality,
+        "next": next_
       }.reject do |_k, v|
         v == OMIT
       end
@@ -68,20 +88,28 @@ module Ittybit
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
       kind = parsed_json["kind"]
-      label = parsed_json["label"]
+      ref = parsed_json["ref"]
       format = parsed_json["format"]
+      start = parsed_json["start"]
+      end_ = parsed_json["end"]
       width = parsed_json["width"]
       height = parsed_json["height"]
-      resize = parsed_json["resize"]
+      fit = parsed_json["fit"]
+      background = parsed_json["background"]
       quality = parsed_json["quality"]
+      next_ = parsed_json["next"]
       new(
         kind: kind,
-        label: label,
+        ref: ref,
         format: format,
+        start: start,
+        end_: end_,
         width: width,
         height: height,
-        resize: resize,
+        fit: fit,
+        background: background,
         quality: quality,
+        next_: next_,
         additional_properties: struct
       )
     end
@@ -101,12 +129,16 @@ module Ittybit
     # @return [Void]
     def self.validate_raw(obj:)
       obj.kind.is_a?(Ittybit::WorkflowTaskStepKind) != false || raise("Passed value for field obj.kind is not the expected type, validation failed.")
-      obj.label&.is_a?(String) != false || raise("Passed value for field obj.label is not the expected type, validation failed.")
+      obj.ref&.is_a?(String) != false || raise("Passed value for field obj.ref is not the expected type, validation failed.")
       obj.format&.is_a?(String) != false || raise("Passed value for field obj.format is not the expected type, validation failed.")
+      obj.start&.is_a?(Float) != false || raise("Passed value for field obj.start is not the expected type, validation failed.")
+      obj.end_&.is_a?(Float) != false || raise("Passed value for field obj.end_ is not the expected type, validation failed.")
       obj.width&.is_a?(Integer) != false || raise("Passed value for field obj.width is not the expected type, validation failed.")
       obj.height&.is_a?(Integer) != false || raise("Passed value for field obj.height is not the expected type, validation failed.")
-      obj.resize&.is_a?(String) != false || raise("Passed value for field obj.resize is not the expected type, validation failed.")
+      obj.fit&.is_a?(String) != false || raise("Passed value for field obj.fit is not the expected type, validation failed.")
+      obj.background&.is_a?(String) != false || raise("Passed value for field obj.background is not the expected type, validation failed.")
       obj.quality&.is_a?(Integer) != false || raise("Passed value for field obj.quality is not the expected type, validation failed.")
+      obj.next_&.is_a?(Array) != false || raise("Passed value for field obj.next_ is not the expected type, validation failed.")
     end
   end
 end

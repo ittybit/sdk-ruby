@@ -9,24 +9,21 @@ require "json"
 
 module Ittybit
   class Automation
-    # @return [String] Unique identifier for the automation
+    # @return [String]
     attr_reader :id
-    # @return [String] User-defined name for the automation
+    # @return [String]
     attr_reader :name
-    # @return [String] Optional description for the automation
+    # @return [String]
     attr_reader :description
-    # @return [Hash{String => Object}] User-defined key-value metadata for the automation.
-    attr_reader :metadata
-    # @return [Ittybit::AutomationTrigger] The event and conditions that trigger this automation.
+    # @return [Ittybit::AutomationTrigger]
     attr_reader :trigger
-    # @return [Array<Ittybit::WorkflowTaskStep>] The sequence of tasks to be executed when the automation is triggered. The
-    #  structure of each task object varies depending on its 'kind'.
+    # @return [Array<Ittybit::WorkflowTaskStep>]
     attr_reader :workflow
-    # @return [Ittybit::AutomationStatus] Current status of the automation
+    # @return [Ittybit::AutomationStatus]
     attr_reader :status
-    # @return [DateTime] Timestamp when the automation was created
+    # @return [DateTime]
     attr_reader :created
-    # @return [DateTime] Timestamp when the automation was last updated
+    # @return [DateTime]
     attr_reader :updated
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -36,24 +33,21 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param id [String] Unique identifier for the automation
-    # @param name [String] User-defined name for the automation
-    # @param description [String] Optional description for the automation
-    # @param metadata [Hash{String => Object}] User-defined key-value metadata for the automation.
-    # @param trigger [Ittybit::AutomationTrigger] The event and conditions that trigger this automation.
-    # @param workflow [Array<Ittybit::WorkflowTaskStep>] The sequence of tasks to be executed when the automation is triggered. The
-    #  structure of each task object varies depending on its 'kind'.
-    # @param status [Ittybit::AutomationStatus] Current status of the automation
-    # @param created [DateTime] Timestamp when the automation was created
-    # @param updated [DateTime] Timestamp when the automation was last updated
+    # @param id [String]
+    # @param name [String]
+    # @param description [String]
+    # @param trigger [Ittybit::AutomationTrigger]
+    # @param workflow [Array<Ittybit::WorkflowTaskStep>]
+    # @param status [Ittybit::AutomationStatus]
+    # @param created [DateTime]
+    # @param updated [DateTime]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::Automation]
-    def initialize(id:, name:, trigger:, workflow:, status:, created:, updated:, description: OMIT, metadata: OMIT,
+    def initialize(id:, name:, trigger:, workflow:, status:, created:, updated:, description: OMIT,
                    additional_properties: nil)
       @id = id
       @name = name
       @description = description if description != OMIT
-      @metadata = metadata if metadata != OMIT
       @trigger = trigger
       @workflow = workflow
       @status = status
@@ -64,7 +58,6 @@ module Ittybit
         "id": id,
         "name": name,
         "description": description,
-        "metadata": metadata,
         "trigger": trigger,
         "workflow": workflow,
         "status": status,
@@ -85,7 +78,6 @@ module Ittybit
       id = parsed_json["id"]
       name = parsed_json["name"]
       description = parsed_json["description"]
-      metadata = parsed_json["metadata"]
       if parsed_json["trigger"].nil?
         trigger = nil
       else
@@ -103,7 +95,6 @@ module Ittybit
         id: id,
         name: name,
         description: description,
-        metadata: metadata,
         trigger: trigger,
         workflow: workflow,
         status: status,
@@ -130,7 +121,6 @@ module Ittybit
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.description&.is_a?(String) != false || raise("Passed value for field obj.description is not the expected type, validation failed.")
-      obj.metadata&.is_a?(Hash) != false || raise("Passed value for field obj.metadata is not the expected type, validation failed.")
       Ittybit::AutomationTrigger.validate_raw(obj: obj.trigger)
       obj.workflow.is_a?(Array) != false || raise("Passed value for field obj.workflow is not the expected type, validation failed.")
       obj.status.is_a?(Ittybit::AutomationStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")

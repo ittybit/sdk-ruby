@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Ittybit
-  # Current status of the task.
   class TaskStatus
     PENDING = "pending"
     WAITING = "waiting"

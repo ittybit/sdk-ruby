@@ -16,17 +16,15 @@ module Ittybit
       @request_client = request_client
     end
 
-    # Creates a cryptographically signed URL that provides temporary and restricted
-    #  access to a file. The URL can expire after a specified time and be limited to
-    #  specific HTTP methods.
+    # You can use signatures to create signed URLs which grant access to your
+    #  project's resources, without revealing your project's API key. URLs can expire
+    #  after a specified time and be limited to HTTP `GET` method for read-only access,
+    #  or HTTP `PUT` method for client-side uploads.
     #
-    # @param filename [String] The name of the file to generate a signature for. Special characters will be
-    #  sanitised.
-    # @param folder [String] Optional folder path where the file resides. Special characters will be
-    #  sanitised.
-    # @param expiry [Long] Optional expiry time for the signature in seconds since epoch. Defaults to 60
-    #  minutes from now. Must be a positive integer and in the future.
-    # @param method [Ittybit::Signatures::SignaturesCreateRequestMethod] Optional HTTP method allowed for the signed URL. Defaults to 'get'.
+    # @param filename [String]
+    # @param folder [String]
+    # @param expiry [Integer]
+    # @param method [Ittybit::Signatures::SignaturesCreateRequestMethod]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::SignatureResponse]
     # @example
@@ -37,9 +35,9 @@ module Ittybit
     #  )
     #  api.signatures.create(
     #    filename: "video.mp4",
-    #    folder: "private/user_123",
+    #    folder: "example",
     #    expiry: 1735689600,
-    #    method: GET
+    #    method: PUT
     #  )
     def create(filename:, folder: nil, expiry: nil, method: nil, request_options: nil)
       response = @request_client.conn.post do |req|
@@ -77,17 +75,15 @@ module Ittybit
       @request_client = request_client
     end
 
-    # Creates a cryptographically signed URL that provides temporary and restricted
-    #  access to a file. The URL can expire after a specified time and be limited to
-    #  specific HTTP methods.
+    # You can use signatures to create signed URLs which grant access to your
+    #  project's resources, without revealing your project's API key. URLs can expire
+    #  after a specified time and be limited to HTTP `GET` method for read-only access,
+    #  or HTTP `PUT` method for client-side uploads.
     #
-    # @param filename [String] The name of the file to generate a signature for. Special characters will be
-    #  sanitised.
-    # @param folder [String] Optional folder path where the file resides. Special characters will be
-    #  sanitised.
-    # @param expiry [Long] Optional expiry time for the signature in seconds since epoch. Defaults to 60
-    #  minutes from now. Must be a positive integer and in the future.
-    # @param method [Ittybit::Signatures::SignaturesCreateRequestMethod] Optional HTTP method allowed for the signed URL. Defaults to 'get'.
+    # @param filename [String]
+    # @param folder [String]
+    # @param expiry [Integer]
+    # @param method [Ittybit::Signatures::SignaturesCreateRequestMethod]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::SignatureResponse]
     # @example
@@ -98,9 +94,9 @@ module Ittybit
     #  )
     #  api.signatures.create(
     #    filename: "video.mp4",
-    #    folder: "private/user_123",
+    #    folder: "example",
     #    expiry: 1735689600,
-    #    method: GET
+    #    method: PUT
     #  )
     def create(filename:, folder: nil, expiry: nil, method: nil, request_options: nil)
       Async do

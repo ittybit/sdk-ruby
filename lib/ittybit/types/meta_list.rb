@@ -1,21 +1,28 @@
 # frozen_string_literal: true
 
+require_relative "meta_list_type"
 require "ostruct"
 require "json"
 
 module Ittybit
   class MetaList
-    # @return [String] Request ID
+    # @return [String]
     attr_reader :request_id
-    # @return [String] Type of the primary data value in the response
+    # @return [String]
+    attr_reader :org_id
+    # @return [String]
+    attr_reader :project_id
+    # @return [String]
+    attr_reader :version
+    # @return [Ittybit::MetaListType]
     attr_reader :type
-    # @return [Integer] Number of items per page.
+    # @return [Integer]
     attr_reader :limit
-    # @return [Integer] Total number of items matching the query.
+    # @return [Integer]
     attr_reader :total
-    # @return [Integer] Current page number.
+    # @return [Integer]
     attr_reader :page
-    # @return [Integer] Total number of pages.
+    # @return [Integer]
     attr_reader :pages
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -25,17 +32,23 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param request_id [String] Request ID
-    # @param type [String] Type of the primary data value in the response
-    # @param limit [Integer] Number of items per page.
-    # @param total [Integer] Total number of items matching the query.
-    # @param page [Integer] Current page number.
-    # @param pages [Integer] Total number of pages.
+    # @param request_id [String]
+    # @param org_id [String]
+    # @param project_id [String]
+    # @param version [String]
+    # @param type [Ittybit::MetaListType]
+    # @param limit [Integer]
+    # @param total [Integer]
+    # @param page [Integer]
+    # @param pages [Integer]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::MetaList]
-    def initialize(request_id: OMIT, type: OMIT, limit: OMIT, total: OMIT, page: OMIT, pages: OMIT,
-                   additional_properties: nil)
+    def initialize(request_id: OMIT, org_id: OMIT, project_id: OMIT, version: OMIT, type: OMIT, limit: OMIT,
+                   total: OMIT, page: OMIT, pages: OMIT, additional_properties: nil)
       @request_id = request_id if request_id != OMIT
+      @org_id = org_id if org_id != OMIT
+      @project_id = project_id if project_id != OMIT
+      @version = version if version != OMIT
       @type = type if type != OMIT
       @limit = limit if limit != OMIT
       @total = total if total != OMIT
@@ -44,6 +57,9 @@ module Ittybit
       @additional_properties = additional_properties
       @_field_set = {
         "request_id": request_id,
+        "org_id": org_id,
+        "project_id": project_id,
+        "version": version,
         "type": type,
         "limit": limit,
         "total": total,
@@ -62,6 +78,9 @@ module Ittybit
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
       request_id = parsed_json["request_id"]
+      org_id = parsed_json["org_id"]
+      project_id = parsed_json["project_id"]
+      version = parsed_json["version"]
       type = parsed_json["type"]
       limit = parsed_json["limit"]
       total = parsed_json["total"]
@@ -69,6 +88,9 @@ module Ittybit
       pages = parsed_json["pages"]
       new(
         request_id: request_id,
+        org_id: org_id,
+        project_id: project_id,
+        version: version,
         type: type,
         limit: limit,
         total: total,
@@ -93,7 +115,10 @@ module Ittybit
     # @return [Void]
     def self.validate_raw(obj:)
       obj.request_id&.is_a?(String) != false || raise("Passed value for field obj.request_id is not the expected type, validation failed.")
-      obj.type&.is_a?(String) != false || raise("Passed value for field obj.type is not the expected type, validation failed.")
+      obj.org_id&.is_a?(String) != false || raise("Passed value for field obj.org_id is not the expected type, validation failed.")
+      obj.project_id&.is_a?(String) != false || raise("Passed value for field obj.project_id is not the expected type, validation failed.")
+      obj.version&.is_a?(String) != false || raise("Passed value for field obj.version is not the expected type, validation failed.")
+      obj.type&.is_a?(Ittybit::MetaListType) != false || raise("Passed value for field obj.type is not the expected type, validation failed.")
       obj.limit&.is_a?(Integer) != false || raise("Passed value for field obj.limit is not the expected type, validation failed.")
       obj.total&.is_a?(Integer) != false || raise("Passed value for field obj.total is not the expected type, validation failed.")
       obj.page&.is_a?(Integer) != false || raise("Passed value for field obj.page is not the expected type, validation failed.")

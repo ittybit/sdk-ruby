@@ -3,7 +3,7 @@
 require_relative "../../requests"
 require_relative "../types/file_list_response"
 require_relative "../types/file_response"
-require_relative "types/files_delete_response"
+require_relative "../types/confirmation_response"
 require "async"
 
 module Ittybit
@@ -18,9 +18,8 @@ module Ittybit
     end
 
     # Retrieves a paginated list of all files associated with the current project.
-    #  Files can be filtered using query parameters.
     #
-    # @param limit [Integer] Items per page
+    # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::FileListResponse]
     # @example
@@ -49,16 +48,14 @@ module Ittybit
       Ittybit::FileListResponse.from_json(json_object: response.body)
     end
 
-    # Registers a file from a publicly accessible URL. The file will be ingested
-    #  asynchronously.
+    # Creates a new file from a publicly accessible or signed URL.
     #
-    # @param url [String] The publicly accessible URL of the file to ingest.
-    # @param filename [String] Optional desired filename. If not provided, it may be derived from the URL.
-    # @param folder [String] Folder path (optional)
-    # @param media_id [String] Optional existing media ID to associate the file with.
-    # @param label [String] Optional label for the file.
-    # @param metadata [Hash{String => Object}] Optional user-defined key-value metadata.
-    # @param async [Boolean] Whether to process the ingestion asynchronously.
+    # @param url [String]
+    # @param media_id [String]
+    # @param folder [String]
+    # @param filename [String]
+    # @param ref [String]
+    # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::FileResponse]
     # @example
@@ -68,13 +65,12 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.create(
-    #    url: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    #    filename: "bunny.mp4",
-    #    folder: "examples/cartoons",
-    #    metadata: { "credit": "gtv-videos-bucket" }
+    #    url: "https://ittyb.it/sample.mp4",
+    #    folder: "ittybit/samples",
+    #    filename: "video.mp4",
+    #    metadata: { "customKey2": "a different custom value" }
     #  )
-    def create(url:, filename: nil, folder: nil, media_id: nil, label: nil, metadata: nil, async: nil,
-               request_options: nil)
+    def create(url:, media_id: nil, folder: nil, filename: nil, ref: nil, metadata: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
@@ -90,20 +86,18 @@ module Ittybit
         req.body = {
           **(request_options&.additional_body_parameters || {}),
           url: url,
-          filename: filename,
-          folder: folder,
           media_id: media_id,
-          label: label,
-          metadata: metadata,
-          async: async
+          folder: folder,
+          filename: filename,
+          ref: ref,
+          metadata: metadata
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/files"
       end
       Ittybit::FileResponse.from_json(json_object: response.body)
     end
 
-    # Retrieves detailed information about a specific file identified by its unique
-    #  ID, including its metadata, media associations, and technical properties.
+    # Retrieve the file object for a file with the given ID.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
@@ -137,11 +131,10 @@ module Ittybit
     end
 
     # Permanently removes a file from the system. This action cannot be undone.
-    #  Associated media entries may still reference this file ID.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::Files::FilesDeleteResponse]
+    # @return [Ittybit::ConfirmationResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -167,17 +160,17 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/files/#{id}"
       end
-      Ittybit::Files::FilesDeleteResponse.from_json(json_object: response.body)
+      Ittybit::ConfirmationResponse.from_json(json_object: response.body)
     end
 
-    # Updates metadata, filename, or folder properties of an existing file. Only the
-    #  specified fields will be updated.
+    # Update a file's `filename`, `folder`, `ref`, or `metadata`. Only the specified
+    #  fields will be updated.
     #
     # @param id [String]
-    # @param metadata [Hash{String => Object}] An object containing key-value pairs to set or update. Set a key to null to
-    #  remove it.
-    # @param filename [String] New filename for the file.
-    # @param folder [String] New folder path for the file.
+    # @param folder [String]
+    # @param filename [String]
+    # @param ref [String]
+    # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::FileResponse]
     # @example
@@ -188,10 +181,11 @@ module Ittybit
     #  )
     #  api.files.update(
     #    id: "id",
-    #    filename: "final_approved_video.mp4",
-    #    folder: "archive/2024"
+    #    folder: "updated/folder",
+    #    filename: "new_filename.mp4",
+    #    metadata: { "customKey2": "a different custom value" }
     #  )
-    def update(id:, metadata: nil, filename: nil, folder: nil, request_options: nil)
+    def update(id:, folder: nil, filename: nil, ref: nil, metadata: nil, request_options: nil)
       response = @request_client.conn.patch do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
@@ -206,9 +200,10 @@ module Ittybit
         end
         req.body = {
           **(request_options&.additional_body_parameters || {}),
-          metadata: metadata,
+          folder: folder,
           filename: filename,
-          folder: folder
+          ref: ref,
+          metadata: metadata
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/files/#{id}"
       end
@@ -227,9 +222,8 @@ module Ittybit
     end
 
     # Retrieves a paginated list of all files associated with the current project.
-    #  Files can be filtered using query parameters.
     #
-    # @param limit [Integer] Items per page
+    # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::FileListResponse]
     # @example
@@ -260,16 +254,14 @@ module Ittybit
       end
     end
 
-    # Registers a file from a publicly accessible URL. The file will be ingested
-    #  asynchronously.
+    # Creates a new file from a publicly accessible or signed URL.
     #
-    # @param url [String] The publicly accessible URL of the file to ingest.
-    # @param filename [String] Optional desired filename. If not provided, it may be derived from the URL.
-    # @param folder [String] Folder path (optional)
-    # @param media_id [String] Optional existing media ID to associate the file with.
-    # @param label [String] Optional label for the file.
-    # @param metadata [Hash{String => Object}] Optional user-defined key-value metadata.
-    # @param async [Boolean] Whether to process the ingestion asynchronously.
+    # @param url [String]
+    # @param media_id [String]
+    # @param folder [String]
+    # @param filename [String]
+    # @param ref [String]
+    # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::FileResponse]
     # @example
@@ -279,13 +271,12 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.create(
-    #    url: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    #    filename: "bunny.mp4",
-    #    folder: "examples/cartoons",
-    #    metadata: { "credit": "gtv-videos-bucket" }
+    #    url: "https://ittyb.it/sample.mp4",
+    #    folder: "ittybit/samples",
+    #    filename: "video.mp4",
+    #    metadata: { "customKey2": "a different custom value" }
     #  )
-    def create(url:, filename: nil, folder: nil, media_id: nil, label: nil, metadata: nil, async: nil,
-               request_options: nil)
+    def create(url:, media_id: nil, folder: nil, filename: nil, ref: nil, metadata: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -302,12 +293,11 @@ module Ittybit
           req.body = {
             **(request_options&.additional_body_parameters || {}),
             url: url,
-            filename: filename,
-            folder: folder,
             media_id: media_id,
-            label: label,
-            metadata: metadata,
-            async: async
+            folder: folder,
+            filename: filename,
+            ref: ref,
+            metadata: metadata
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/files"
         end
@@ -315,8 +305,7 @@ module Ittybit
       end
     end
 
-    # Retrieves detailed information about a specific file identified by its unique
-    #  ID, including its metadata, media associations, and technical properties.
+    # Retrieve the file object for a file with the given ID.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
@@ -352,11 +341,10 @@ module Ittybit
     end
 
     # Permanently removes a file from the system. This action cannot be undone.
-    #  Associated media entries may still reference this file ID.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::Files::FilesDeleteResponse]
+    # @return [Ittybit::ConfirmationResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -383,18 +371,18 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/files/#{id}"
         end
-        Ittybit::Files::FilesDeleteResponse.from_json(json_object: response.body)
+        Ittybit::ConfirmationResponse.from_json(json_object: response.body)
       end
     end
 
-    # Updates metadata, filename, or folder properties of an existing file. Only the
-    #  specified fields will be updated.
+    # Update a file's `filename`, `folder`, `ref`, or `metadata`. Only the specified
+    #  fields will be updated.
     #
     # @param id [String]
-    # @param metadata [Hash{String => Object}] An object containing key-value pairs to set or update. Set a key to null to
-    #  remove it.
-    # @param filename [String] New filename for the file.
-    # @param folder [String] New folder path for the file.
+    # @param folder [String]
+    # @param filename [String]
+    # @param ref [String]
+    # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::FileResponse]
     # @example
@@ -405,10 +393,11 @@ module Ittybit
     #  )
     #  api.files.update(
     #    id: "id",
-    #    filename: "final_approved_video.mp4",
-    #    folder: "archive/2024"
+    #    folder: "updated/folder",
+    #    filename: "new_filename.mp4",
+    #    metadata: { "customKey2": "a different custom value" }
     #  )
-    def update(id:, metadata: nil, filename: nil, folder: nil, request_options: nil)
+    def update(id:, folder: nil, filename: nil, ref: nil, metadata: nil, request_options: nil)
       Async do
         response = @request_client.conn.patch do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -424,9 +413,10 @@ module Ittybit
           end
           req.body = {
             **(request_options&.additional_body_parameters || {}),
-            metadata: metadata,
+            folder: folder,
             filename: filename,
-            folder: folder
+            ref: ref,
+            metadata: metadata
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/files/#{id}"
         end

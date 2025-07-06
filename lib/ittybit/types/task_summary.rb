@@ -8,25 +8,25 @@ require "json"
 
 module Ittybit
   class TaskSummary
-    # @return [String] Unique identifier for the task.
+    # @return [String]
     attr_reader :id
-    # @return [String] Object type, always 'task'.
+    # @return [String]
     attr_reader :object
-    # @return [Ittybit::TaskSummaryKind] The type of operation the task performs.
+    # @return [Ittybit::TaskSummaryKind]
     attr_reader :kind
-    # @return [Ittybit::TaskSummaryStatus] Current status of the task.
+    # @return [Ittybit::TaskSummaryStatus]
     attr_reader :status
-    # @return [Integer] Task progress percentage.
+    # @return [Integer]
     attr_reader :progress
-    # @return [String] Error message if the task failed.
+    # @return [String]
     attr_reader :error
-    # @return [String] ID of the entity that created the task (e.g., user ID, automation ID).
+    # @return [String]
     attr_reader :created_by
-    # @return [DateTime] Timestamp when the task was created.
+    # @return [DateTime]
     attr_reader :created
-    # @return [DateTime] Timestamp when the task was last updated.
+    # @return [DateTime]
     attr_reader :updated
-    # @return [String] ID of the parent task if this is part of a workflow.
+    # @return [String]
     attr_reader :parent_id
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -36,16 +36,16 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param id [String] Unique identifier for the task.
-    # @param object [String] Object type, always 'task'.
-    # @param kind [Ittybit::TaskSummaryKind] The type of operation the task performs.
-    # @param status [Ittybit::TaskSummaryStatus] Current status of the task.
-    # @param progress [Integer] Task progress percentage.
-    # @param error [String] Error message if the task failed.
-    # @param created_by [String] ID of the entity that created the task (e.g., user ID, automation ID).
-    # @param created [DateTime] Timestamp when the task was created.
-    # @param updated [DateTime] Timestamp when the task was last updated.
-    # @param parent_id [String] ID of the parent task if this is part of a workflow.
+    # @param id [String]
+    # @param object [String]
+    # @param kind [Ittybit::TaskSummaryKind]
+    # @param status [Ittybit::TaskSummaryStatus]
+    # @param progress [Integer]
+    # @param error [String]
+    # @param created_by [String]
+    # @param created [DateTime]
+    # @param updated [DateTime]
+    # @param parent_id [String]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::TaskSummary]
     def initialize(id:, object:, kind:, status:, created:, updated:, progress: OMIT, error: OMIT, created_by: OMIT,

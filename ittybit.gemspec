@@ -4,7 +4,7 @@ require_relative "lib/gemconfig"
 
 Gem::Specification.new do |spec|
   spec.name = "ittybit"
-  spec.version = "0.7.5.2"
+  spec.version = "0.7.6"
   spec.authors = Ittybit::Gemconfig::AUTHORS
   spec.email = Ittybit::Gemconfig::EMAIL
   spec.summary = Ittybit::Gemconfig::SUMMARY

@@ -5,9 +5,9 @@ require "json"
 
 module Ittybit
   class Links
-    # @return [String] The absolute URL of the current request, potentially including query parameters.
+    # @return [String]
     attr_reader :self_
-    # @return [String] URL for the parent resource.
+    # @return [String]
     attr_reader :parent
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -17,8 +17,8 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param self_ [String] The absolute URL of the current request, potentially including query parameters.
-    # @param parent [String] URL for the parent resource.
+    # @param self_ [String]
+    # @param parent [String]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::Links]
     def initialize(self_: OMIT, parent: OMIT, additional_properties: nil)

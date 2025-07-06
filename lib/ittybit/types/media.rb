@@ -2,44 +2,39 @@
 
 require_relative "media_kind"
 require_relative "media_source"
-require_relative "media_urls"
 require "date"
 require "ostruct"
 require "json"
 
 module Ittybit
   class Media
-    # @return [String] Unique identifier for the media item.
+    # @return [String]
     attr_reader :id
-    # @return [String] Object type, always 'media'.
+    # @return [String]
     attr_reader :object
-    # @return [Ittybit::MediaKind] The primary kind of the media, derived from the original file.
+    # @return [Ittybit::MediaKind]
     attr_reader :kind
-    # @return [String] Title of the media item.
+    # @return [String]
     attr_reader :title
-    # @return [String] Alternative text for the media item.
+    # @return [String]
     attr_reader :alt
-    # @return [Integer] Width of the primary source in pixels.
+    # @return [Integer]
     attr_reader :width
-    # @return [Integer] Height of the primary source in pixels.
+    # @return [Integer]
     attr_reader :height
-    # @return [Float] Duration of the primary source in seconds.
+    # @return [Float]
     attr_reader :duration
-    # @return [Array<Ittybit::MediaSource>] Array of source files associated with this media item.
+    # @return [Array<Ittybit::MediaSource>]
     attr_reader :files
-    # @return [Ittybit::MediaUrls] URLs for the media item.
+    # @return [Hash{String => Object}]
     attr_reader :urls
-    # @return [String] URL of the poster image (video kinds only).
-    attr_reader :poster
-    # @return [String] Base64 encoded placeholder image (video/image only).
-    attr_reader :placeholder
-    # @return [String] Dominant background color hex code (video/image only).
+    # @return [String]
     attr_reader :background
-    # @return [Hash{String => Object}] User-defined key-value metadata for the media item.
+    # @return [Hash{String => Object}]
     attr_reader :metadata
-    # @return [DateTime] Timestamp when the media record was created.
+    # @return [DateTime]
     attr_reader :created
-    # @return [DateTime] Timestamp when the media item was last updated.
+    # @return [DateTime]
     attr_reader :updated
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -49,29 +44,27 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param id [String] Unique identifier for the media item.
-    # @param object [String] Object type, always 'media'.
-    # @param kind [Ittybit::MediaKind] The primary kind of the media, derived from the original file.
-    # @param title [String] Title of the media item.
-    # @param alt [String] Alternative text for the media item.
-    # @param width [Integer] Width of the primary source in pixels.
-    # @param height [Integer] Height of the primary source in pixels.
-    # @param duration [Float] Duration of the primary source in seconds.
-    # @param files [Array<Ittybit::MediaSource>] Array of source files associated with this media item.
-    # @param urls [Ittybit::MediaUrls] URLs for the media item.
-    # @param poster [String] URL of the poster image (video kinds only).
-    # @param placeholder [String] Base64 encoded placeholder image (video/image only).
-    # @param background [String] Dominant background color hex code (video/image only).
-    # @param metadata [Hash{String => Object}] User-defined key-value metadata for the media item.
-    # @param created [DateTime] Timestamp when the media record was created.
-    # @param updated [DateTime] Timestamp when the media item was last updated.
+    # @param id [String]
+    # @param object [String]
+    # @param kind [Ittybit::MediaKind]
+    # @param title [String]
+    # @param alt [String]
+    # @param width [Integer]
+    # @param height [Integer]
+    # @param duration [Float]
+    # @param files [Array<Ittybit::MediaSource>]
+    # @param urls [Hash{String => Object}]
+    # @param background [String]
+    # @param metadata [Hash{String => Object}]
+    # @param created [DateTime]
+    # @param updated [DateTime]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::Media]
-    def initialize(id:, object:, kind:, files:, urls:, created:, updated:, title: OMIT, alt: OMIT, width: OMIT,
-                   height: OMIT, duration: OMIT, poster: OMIT, placeholder: OMIT, background: OMIT, metadata: OMIT, additional_properties: nil)
+    def initialize(id:, object:, files:, urls:, created:, updated:, kind: OMIT, title: OMIT, alt: OMIT, width: OMIT,
+                   height: OMIT, duration: OMIT, background: OMIT, metadata: OMIT, additional_properties: nil)
       @id = id
       @object = object
-      @kind = kind
+      @kind = kind if kind != OMIT
       @title = title if title != OMIT
       @alt = alt if alt != OMIT
       @width = width if width != OMIT
@@ -79,8 +72,6 @@ module Ittybit
       @duration = duration if duration != OMIT
       @files = files
       @urls = urls
-      @poster = poster if poster != OMIT
-      @placeholder = placeholder if placeholder != OMIT
       @background = background if background != OMIT
       @metadata = metadata if metadata != OMIT
       @created = created
@@ -97,8 +88,6 @@ module Ittybit
         "duration": duration,
         "files": files,
         "urls": urls,
-        "poster": poster,
-        "placeholder": placeholder,
         "background": background,
         "metadata": metadata,
         "created": created,
@@ -127,14 +116,7 @@ module Ittybit
         item = item.to_json
         Ittybit::MediaSource.from_json(json_object: item)
       end
-      if parsed_json["urls"].nil?
-        urls = nil
-      else
-        urls = parsed_json["urls"].to_json
-        urls = Ittybit::MediaUrls.from_json(json_object: urls)
-      end
-      poster = parsed_json["poster"]
-      placeholder = parsed_json["placeholder"]
+      urls = parsed_json["urls"]
       background = parsed_json["background"]
       metadata = parsed_json["metadata"]
       created = (DateTime.parse(parsed_json["created"]) unless parsed_json["created"].nil?)
@@ -150,8 +132,6 @@ module Ittybit
         duration: duration,
         files: files,
         urls: urls,
-        poster: poster,
-        placeholder: placeholder,
         background: background,
         metadata: metadata,
         created: created,
@@ -176,16 +156,14 @@ module Ittybit
     def self.validate_raw(obj:)
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.object.is_a?(String) != false || raise("Passed value for field obj.object is not the expected type, validation failed.")
-      obj.kind.is_a?(Ittybit::MediaKind) != false || raise("Passed value for field obj.kind is not the expected type, validation failed.")
+      obj.kind&.is_a?(Ittybit::MediaKind) != false || raise("Passed value for field obj.kind is not the expected type, validation failed.")
       obj.title&.is_a?(String) != false || raise("Passed value for field obj.title is not the expected type, validation failed.")
       obj.alt&.is_a?(String) != false || raise("Passed value for field obj.alt is not the expected type, validation failed.")
       obj.width&.is_a?(Integer) != false || raise("Passed value for field obj.width is not the expected type, validation failed.")
       obj.height&.is_a?(Integer) != false || raise("Passed value for field obj.height is not the expected type, validation failed.")
       obj.duration&.is_a?(Float) != false || raise("Passed value for field obj.duration is not the expected type, validation failed.")
       obj.files.is_a?(Array) != false || raise("Passed value for field obj.files is not the expected type, validation failed.")
-      Ittybit::MediaUrls.validate_raw(obj: obj.urls)
-      obj.poster&.is_a?(String) != false || raise("Passed value for field obj.poster is not the expected type, validation failed.")
-      obj.placeholder&.is_a?(String) != false || raise("Passed value for field obj.placeholder is not the expected type, validation failed.")
+      obj.urls.is_a?(Hash) != false || raise("Passed value for field obj.urls is not the expected type, validation failed.")
       obj.background&.is_a?(String) != false || raise("Passed value for field obj.background is not the expected type, validation failed.")
       obj.metadata&.is_a?(Hash) != false || raise("Passed value for field obj.metadata is not the expected type, validation failed.")
       obj.created.is_a?(DateTime) != false || raise("Passed value for field obj.created is not the expected type, validation failed.")

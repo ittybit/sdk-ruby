@@ -9,71 +9,69 @@ require "json"
 
 module Ittybit
   class File
-    # @return [String] Unique identifier for the file.
+    # @return [String]
     attr_reader :id
-    # @return [String] Identifier for the parent media object.
+    # @return [String]
     attr_reader :media_id
-    # @return [Ittybit::FileObject] Object type
+    # @return [Ittybit::FileObject]
     attr_reader :object
-    # @return [Ittybit::FileKind] The general type of media.
+    # @return [Ittybit::FileKind]
     attr_reader :kind
-    # @return [String] MIME type.
+    # @return [String]
     attr_reader :type
-    # @return [String] Codec of the file.
+    # @return [String]
     attr_reader :codec
-    # @return [String] Container of the file.
+    # @return [String]
     attr_reader :container
-    # @return [Integer] Width in pixels (for image/video).
+    # @return [Integer]
     attr_reader :width
-    # @return [Integer] Height in pixels (for image/video).
+    # @return [Integer]
     attr_reader :height
-    # @return [String] Orientation of the file.
+    # @return [String]
     attr_reader :orientation
-    # @return [Float] Rotation value for image files with embedded EXIF data.
+    # @return [Float]
     attr_reader :rotation
-    # @return [Boolean] Indicates if the file has alpha channel.
+    # @return [Boolean]
     attr_reader :transparency
-    # @return [Boolean] Indicates if the file is animated (image only).
+    # @return [Boolean]
     attr_reader :animated
-    # @return [Integer] Number of frames in the file.
+    # @return [Integer]
     attr_reader :frames
-    # @return [Float] Duration in seconds (for audio/video).
+    # @return [Float]
     attr_reader :duration
-    # @return [Float] Frames per second (for video).
+    # @return [Float]
     attr_reader :fps
-    # @return [Integer] File size in bytes.
+    # @return [Integer]
     attr_reader :filesize
-    # @return [Integer] Bitrate for audio/video files.
+    # @return [Integer]
     attr_reader :bitrate
-    # @return [String] Language code (e.g., en, es, fr).
+    # @return [String]
     attr_reader :language
-    # @return [String] Label to be used by players (tracks only).
+    # @return [String]
     attr_reader :label
-    # @return [String] Optional reference value. If set, the file URL will be included in the parent
-    #  media `urls` object.
+    # @return [String]
     attr_reader :ref
-    # @return [String] The folder path where the file is stored.
+    # @return [String]
     attr_reader :folder
-    # @return [String] The name of the file.
+    # @return [String]
     attr_reader :filename
-    # @return [String] Publicly accessible URL for the file.
+    # @return [String]
     attr_reader :url
-    # @return [String] Base64 encoded placeholder image for the file.
+    # @return [String]
     attr_reader :placeholder
-    # @return [String] Dominant background color hex code.
+    # @return [String]
     attr_reader :background
-    # @return [Hash{String => Object}] User-defined key-value metadata.
+    # @return [Hash{String => Object}]
     attr_reader :metadata
-    # @return [Boolean] Indicates this is the original file rather than a variant.
+    # @return [Boolean]
     attr_reader :original
-    # @return [String] ID of the entity (e.g., task, automation, or upload request) that created this
-    #  file.
+    # @return [String]
     attr_reader :created_by
-    # @return [DateTime] Timestamp when the file record was created.
+    # @return [DateTime]
     attr_reader :created
-    # @return [DateTime] Timestamp when the file record was last updated.
+    # @return [DateTime]
     attr_reader :updated
-    # @return [Ittybit::FileStatus] Processing status of the file.
+    # @return [Ittybit::FileStatus]
     attr_reader :status
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -83,40 +81,38 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param id [String] Unique identifier for the file.
-    # @param media_id [String] Identifier for the parent media object.
-    # @param object [Ittybit::FileObject] Object type
-    # @param kind [Ittybit::FileKind] The general type of media.
-    # @param type [String] MIME type.
-    # @param codec [String] Codec of the file.
-    # @param container [String] Container of the file.
-    # @param width [Integer] Width in pixels (for image/video).
-    # @param height [Integer] Height in pixels (for image/video).
-    # @param orientation [String] Orientation of the file.
-    # @param rotation [Float] Rotation value for image files with embedded EXIF data.
-    # @param transparency [Boolean] Indicates if the file has alpha channel.
-    # @param animated [Boolean] Indicates if the file is animated (image only).
-    # @param frames [Integer] Number of frames in the file.
-    # @param duration [Float] Duration in seconds (for audio/video).
-    # @param fps [Float] Frames per second (for video).
-    # @param filesize [Integer] File size in bytes.
-    # @param bitrate [Integer] Bitrate for audio/video files.
-    # @param language [String] Language code (e.g., en, es, fr).
-    # @param label [String] Label to be used by players (tracks only).
-    # @param ref [String] Optional reference value. If set, the file URL will be included in the parent
-    #  media `urls` object.
-    # @param folder [String] The folder path where the file is stored.
-    # @param filename [String] The name of the file.
-    # @param url [String] Publicly accessible URL for the file.
-    # @param placeholder [String] Base64 encoded placeholder image for the file.
-    # @param background [String] Dominant background color hex code.
-    # @param metadata [Hash{String => Object}] User-defined key-value metadata.
-    # @param original [Boolean] Indicates this is the original file rather than a variant.
-    # @param created_by [String] ID of the entity (e.g., task, automation, or upload request) that created this
-    #  file.
-    # @param created [DateTime] Timestamp when the file record was created.
-    # @param updated [DateTime] Timestamp when the file record was last updated.
-    # @param status [Ittybit::FileStatus] Processing status of the file.
+    # @param id [String]
+    # @param media_id [String]
+    # @param object [Ittybit::FileObject]
+    # @param kind [Ittybit::FileKind]
+    # @param type [String]
+    # @param codec [String]
+    # @param container [String]
+    # @param width [Integer]
+    # @param height [Integer]
+    # @param orientation [String]
+    # @param rotation [Float]
+    # @param transparency [Boolean]
+    # @param animated [Boolean]
+    # @param frames [Integer]
+    # @param duration [Float]
+    # @param fps [Float]
+    # @param filesize [Integer]
+    # @param bitrate [Integer]
+    # @param language [String]
+    # @param label [String]
+    # @param ref [String]
+    # @param folder [String]
+    # @param filename [String]
+    # @param url [String]
+    # @param placeholder [String]
+    # @param background [String]
+    # @param metadata [Hash{String => Object}]
+    # @param original [Boolean]
+    # @param created_by [String]
+    # @param created [DateTime]
+    # @param updated [DateTime]
+    # @param status [Ittybit::FileStatus]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::File]
     def initialize(id:, media_id:, object:, kind:, type:, filesize:, url:, created:, updated:, status:, codec: OMIT, container: OMIT, width: OMIT, height: OMIT,

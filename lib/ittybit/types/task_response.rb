@@ -2,6 +2,7 @@
 
 require_relative "meta"
 require_relative "task"
+require_relative "error"
 require_relative "links"
 require "ostruct"
 require "json"
@@ -12,6 +13,8 @@ module Ittybit
     attr_reader :meta
     # @return [Ittybit::Task]
     attr_reader :data
+    # @return [Ittybit::Error]
+    attr_reader :error
     # @return [Ittybit::Links]
     attr_reader :links
     # @return [OpenStruct] Additional properties unmapped to the current class definition
@@ -24,15 +27,17 @@ module Ittybit
 
     # @param meta [Ittybit::META]
     # @param data [Ittybit::Task]
+    # @param error [Ittybit::Error]
     # @param links [Ittybit::Links]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::TaskResponse]
-    def initialize(meta: OMIT, data: OMIT, links: OMIT, additional_properties: nil)
+    def initialize(meta: OMIT, data: OMIT, error: OMIT, links: OMIT, additional_properties: nil)
       @meta = meta if meta != OMIT
       @data = data if data != OMIT
+      @error = error if error != OMIT
       @links = links if links != OMIT
       @additional_properties = additional_properties
-      @_field_set = { "meta": meta, "data": data, "links": links }.reject do |_k, v|
+      @_field_set = { "meta": meta, "data": data, "error": error, "links": links }.reject do |_k, v|
         v == OMIT
       end
     end
@@ -51,6 +56,12 @@ module Ittybit
         data = parsed_json["data"].to_json
         data = Ittybit::Task.from_json(json_object: data)
       end
+      if parsed_json["error"].nil?
+        error = nil
+      else
+        error = parsed_json["error"].to_json
+        error = Ittybit::Error.from_json(json_object: error)
+      end
       if parsed_json["links"].nil?
         links = nil
       else
@@ -60,6 +71,7 @@ module Ittybit
       new(
         meta: meta,
         data: data,
+        error: error,
         links: links,
         additional_properties: struct
       )
@@ -81,6 +93,7 @@ module Ittybit
     def self.validate_raw(obj:)
       obj.meta&.is_a?(Object) != false || raise("Passed value for field obj.meta is not the expected type, validation failed.")
       obj.data.nil? || Ittybit::Task.validate_raw(obj: obj.data)
+      obj.error.nil? || Ittybit::Error.validate_raw(obj: obj.error)
       obj.links.nil? || Ittybit::Links.validate_raw(obj: obj.links)
     end
   end
