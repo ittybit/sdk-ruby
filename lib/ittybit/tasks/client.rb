@@ -17,6 +17,7 @@ module Ittybit
       @request_client = request_client
     end
 
+    # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::TaskListResponse]
@@ -27,7 +28,7 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.tasks.list
-    def list(limit: nil, request_options: nil)
+    def list(page: nil, limit: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
@@ -37,7 +38,7 @@ module Ittybit
       **@request_client.get_headers,
       **(request_options&.additional_headers || {})
         }.compact
-        req.params = { **(request_options&.additional_query_parameters || {}), "limit": limit }.compact
+        req.params = { **(request_options&.additional_query_parameters || {}), "page": page, "limit": limit }.compact
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
@@ -89,7 +90,7 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.tasks.get(id: "id")
+    #  api.tasks.get(id: "task_abcdefgh1234")
     def get(id:, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -154,6 +155,7 @@ module Ittybit
       @request_client = request_client
     end
 
+    # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::TaskListResponse]
@@ -164,7 +166,7 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.tasks.list
-    def list(limit: nil, request_options: nil)
+    def list(page: nil, limit: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -175,7 +177,7 @@ module Ittybit
         **@request_client.get_headers,
         **(request_options&.additional_headers || {})
           }.compact
-          req.params = { **(request_options&.additional_query_parameters || {}), "limit": limit }.compact
+          req.params = { **(request_options&.additional_query_parameters || {}), "page": page, "limit": limit }.compact
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
@@ -230,7 +232,7 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.tasks.get(id: "id")
+    #  api.tasks.get(id: "task_abcdefgh1234")
     def get(id:, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|

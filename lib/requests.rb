@@ -21,7 +21,7 @@ module Ittybit
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
     # @param token [String]
-    # @param version [Integer]
+    # @param version [String]
     # @return [Ittybit::RequestClient]
     def initialize(token:, base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
                    timeout_in_seconds: nil, version: nil)
@@ -46,7 +46,7 @@ module Ittybit
 
     # @return [Hash{String => String}]
     def get_headers
-      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.8.6" }
+      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.8.7" }
       headers["Authorization"] = ((@token.is_a? Method) ? @token.call : @token) unless @token.nil?
       headers
     end
@@ -67,7 +67,7 @@ module Ittybit
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
     # @param token [String]
-    # @param version [Integer]
+    # @param version [String]
     # @return [Ittybit::AsyncRequestClient]
     def initialize(token:, base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
                    timeout_in_seconds: nil, version: nil)
@@ -93,7 +93,7 @@ module Ittybit
 
     # @return [Hash{String => String}]
     def get_headers
-      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.8.6" }
+      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.8.7" }
       headers["Authorization"] = ((@token.is_a? Method) ? @token.call : @token) unless @token.nil?
       headers
     end
@@ -106,7 +106,7 @@ module Ittybit
     attr_reader :base_url
     # @return [String]
     attr_reader :token
-    # @return [Integer]
+    # @return [String]
     attr_reader :version
     # @return [Hash{String => Object}]
     attr_reader :additional_headers
@@ -119,7 +119,7 @@ module Ittybit
 
     # @param base_url [String]
     # @param token [String]
-    # @param version [Integer]
+    # @param version [String]
     # @param additional_headers [Hash{String => Object}]
     # @param additional_query_parameters [Hash{String => Object}]
     # @param additional_body_parameters [Hash{String => Object}]
@@ -144,7 +144,7 @@ module Ittybit
     attr_reader :base_url
     # @return [String]
     attr_reader :token
-    # @return [Integer]
+    # @return [String]
     attr_reader :version
     # @return [Hash{String => Object}]
     attr_reader :additional_headers
@@ -157,7 +157,7 @@ module Ittybit
 
     # @param base_url [String]
     # @param token [String]
-    # @param version [Integer]
+    # @param version [String]
     # @param additional_headers [Hash{String => Object}]
     # @param additional_query_parameters [Hash{String => Object}]
     # @param additional_body_parameters [Hash{String => Object}]

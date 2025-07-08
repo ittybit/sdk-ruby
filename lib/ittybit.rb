@@ -27,7 +27,7 @@ module Ittybit
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
     # @param token [String]
-    # @param version [Integer]
+    # @param version [String]
     # @return [Ittybit::Client]
     def initialize(token:, base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
                    timeout_in_seconds: nil, version: nil)
@@ -64,7 +64,7 @@ module Ittybit
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
     # @param token [String]
-    # @param version [Integer]
+    # @param version [String]
     # @return [Ittybit::AsyncClient]
     def initialize(token:, base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
                    timeout_in_seconds: nil, version: nil)

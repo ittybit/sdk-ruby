@@ -19,6 +19,7 @@ module Ittybit
 
     # Retrieves a paginated list of all media for the current project
     #
+    # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::MediaListResponse]
@@ -29,7 +30,7 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.media.list
-    def list(limit: nil, request_options: nil)
+    def list(page: nil, limit: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
@@ -39,7 +40,7 @@ module Ittybit
       **@request_client.get_headers,
       **(request_options&.additional_headers || {})
         }.compact
-        req.params = { **(request_options&.additional_query_parameters || {}), "limit": limit }.compact
+        req.params = { **(request_options&.additional_query_parameters || {}), "page": page, "limit": limit }.compact
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
@@ -101,7 +102,7 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.media.get(id: "id")
+    #  api.media.get(id: "med_abcdefgh1234")
     def get(id:, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -135,7 +136,7 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.media.delete(id: "id")
+    #  api.media.delete(id: "med_abcdefgh1234")
     def delete(id:, request_options: nil)
       response = @request_client.conn.delete do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -173,7 +174,7 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.media.update(
-    #    id: "id",
+    #    id: "med_abcdefgh1234",
     #    title: "Updated Video Example",
     #    alt: "An updated example video used to demonstrate the ittybit API",
     #    metadata: { "customKey2": "a different custom value" }
@@ -215,6 +216,7 @@ module Ittybit
 
     # Retrieves a paginated list of all media for the current project
     #
+    # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::MediaListResponse]
@@ -225,7 +227,7 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.media.list
-    def list(limit: nil, request_options: nil)
+    def list(page: nil, limit: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -236,7 +238,7 @@ module Ittybit
         **@request_client.get_headers,
         **(request_options&.additional_headers || {})
           }.compact
-          req.params = { **(request_options&.additional_query_parameters || {}), "limit": limit }.compact
+          req.params = { **(request_options&.additional_query_parameters || {}), "page": page, "limit": limit }.compact
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
@@ -301,7 +303,7 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.media.get(id: "id")
+    #  api.media.get(id: "med_abcdefgh1234")
     def get(id:, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
@@ -337,7 +339,7 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.media.delete(id: "id")
+    #  api.media.delete(id: "med_abcdefgh1234")
     def delete(id:, request_options: nil)
       Async do
         response = @request_client.conn.delete do |req|
@@ -377,7 +379,7 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.media.update(
-    #    id: "id",
+    #    id: "med_abcdefgh1234",
     #    title: "Updated Video Example",
     #    alt: "An updated example video used to demonstrate the ittybit API",
     #    metadata: { "customKey2": "a different custom value" }

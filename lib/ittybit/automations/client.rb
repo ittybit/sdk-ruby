@@ -24,6 +24,7 @@ module Ittybit
 
     # Retrieves a paginated list of all automations for the current project
     #
+    # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::AutomationListResponse]
@@ -34,7 +35,7 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.automations.list
-    def list(limit: nil, request_options: nil)
+    def list(page: nil, limit: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
@@ -44,7 +45,7 @@ module Ittybit
       **@request_client.get_headers,
       **(request_options&.additional_headers || {})
         }.compact
-        req.params = { **(request_options&.additional_query_parameters || {}), "limit": limit }.compact
+        req.params = { **(request_options&.additional_query_parameters || {}), "page": page, "limit": limit }.compact
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
@@ -117,7 +118,7 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.automations.get(id: "id")
+    #  api.automations.get(id: "auto_abcdefgh1234")
     def get(id:, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -150,7 +151,7 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.automations.delete(id: "id")
+    #  api.automations.delete(id: "auto_abcdefgh1234")
     def delete(id:, request_options: nil)
       response = @request_client.conn.delete do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -195,7 +196,7 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.automations.update(
-    #    id: "id",
+    #    id: "auto_abcdefgh1234",
     #    name: "My Updated Automation",
     #    workflow: [{ kind: NSFW }, { kind: DESCRIPTION }, { kind: IMAGE, ref: "big_thumbnail" }, { kind: VIDEO, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
     #    status: ACTIVE
@@ -239,6 +240,7 @@ module Ittybit
 
     # Retrieves a paginated list of all automations for the current project
     #
+    # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::AutomationListResponse]
@@ -249,7 +251,7 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.automations.list
-    def list(limit: nil, request_options: nil)
+    def list(page: nil, limit: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -260,7 +262,7 @@ module Ittybit
         **@request_client.get_headers,
         **(request_options&.additional_headers || {})
           }.compact
-          req.params = { **(request_options&.additional_query_parameters || {}), "limit": limit }.compact
+          req.params = { **(request_options&.additional_query_parameters || {}), "page": page, "limit": limit }.compact
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
@@ -336,7 +338,7 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.automations.get(id: "id")
+    #  api.automations.get(id: "auto_abcdefgh1234")
     def get(id:, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
@@ -371,7 +373,7 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.automations.delete(id: "id")
+    #  api.automations.delete(id: "auto_abcdefgh1234")
     def delete(id:, request_options: nil)
       Async do
         response = @request_client.conn.delete do |req|
@@ -418,7 +420,7 @@ module Ittybit
     #    token: "YOUR_AUTH_TOKEN"
     #  )
     #  api.automations.update(
-    #    id: "id",
+    #    id: "auto_abcdefgh1234",
     #    name: "My Updated Automation",
     #    workflow: [{ kind: NSFW }, { kind: DESCRIPTION }, { kind: IMAGE, ref: "big_thumbnail" }, { kind: VIDEO, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
     #    status: ACTIVE
