@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "ittybit/automations/types/update_automation_request_trigger"
-require_relative "ittybit/automations/types/update_automation_request_status"
+require_relative "ittybit/automations/types/automations_create_request_trigger"
+require_relative "ittybit/automations/types/automations_create_request_status"
+require_relative "ittybit/automations/types/automations_update_request_trigger"
+require_relative "ittybit/automations/types/automations_update_request_status"
 require_relative "ittybit/signatures/types/signatures_create_request_method"
 require_relative "ittybit/types/meta"
 require_relative "ittybit/types/meta_list_type"

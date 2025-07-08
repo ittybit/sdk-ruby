@@ -2,7 +2,7 @@
 
 module Ittybit
   class Automations
-    class UpdateAutomationRequestStatus
+    class AutomationsCreateRequestStatus
       ACTIVE = "active"
       PAUSED = "paused"
     end

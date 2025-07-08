@@ -5,7 +5,7 @@ require "json"
 
 module Ittybit
   class Automations
-    class UpdateAutomationRequestTrigger
+    class AutomationsCreateRequestTrigger
       # @return [String]
       attr_reader :kind
       # @return [String]
@@ -21,7 +21,7 @@ module Ittybit
       # @param kind [String]
       # @param event [String]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-      # @return [Ittybit::Automations::UpdateAutomationRequestTrigger]
+      # @return [Ittybit::Automations::AutomationsCreateRequestTrigger]
       def initialize(kind:, event:, additional_properties: nil)
         @kind = kind
         @event = event
@@ -29,10 +29,10 @@ module Ittybit
         @_field_set = { "kind": kind, "event": event }
       end
 
-      # Deserialize a JSON object to an instance of UpdateAutomationRequestTrigger
+      # Deserialize a JSON object to an instance of AutomationsCreateRequestTrigger
       #
       # @param json_object [String]
-      # @return [Ittybit::Automations::UpdateAutomationRequestTrigger]
+      # @return [Ittybit::Automations::AutomationsCreateRequestTrigger]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
@@ -45,7 +45,7 @@ module Ittybit
         )
       end
 
-      # Serialize an instance of UpdateAutomationRequestTrigger to a JSON object
+      # Serialize an instance of AutomationsCreateRequestTrigger to a JSON object
       #
       # @return [String]
       def to_json(*_args)

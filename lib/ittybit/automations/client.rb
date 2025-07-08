@@ -2,11 +2,13 @@
 
 require_relative "../../requests"
 require_relative "../types/automation_list_response"
+require_relative "types/automations_create_request_trigger"
+require_relative "../types/workflow_task_step"
+require_relative "types/automations_create_request_status"
 require_relative "../types/automation_response"
 require_relative "../types/confirmation_response"
-require_relative "types/update_automation_request_trigger"
-require_relative "../types/workflow_task_step"
-require_relative "types/update_automation_request_status"
+require_relative "types/automations_update_request_trigger"
+require_relative "types/automations_update_request_status"
 require "async"
 
 module Ittybit
@@ -53,6 +55,16 @@ module Ittybit
 
     # Creates a new automation.
     #
+    # @param name [String]
+    # @param description [String]
+    # @param trigger [Hash] Request of type Ittybit::Automations::AutomationsCreateRequestTrigger, as a Hash
+    #   * :kind (String)
+    #   * :event (String)
+    # @param workflow [Array<Hash>] Request of type Array<Ittybit::WorkflowTaskStep>, as a Hash
+    #   * :kind (Ittybit::WorkflowTaskStepKind)
+    #   * :ref (String)
+    #   * :next_ (Array<Ittybit::WorkflowTaskStepNextItem>)
+    # @param status [Ittybit::Automations::AutomationsCreateRequestStatus]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::AutomationResponse]
     # @example
@@ -61,8 +73,14 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.automations.create
-    def create(request_options: nil)
+    #  api.automations.create(
+    #    name: "My Example Automation",
+    #    description: "This workflow will run whenever new media is created.",
+    #    trigger: { kind: "event", event: "media.created" },
+    #    workflow: [{ kind: DESCRIPTION }, { kind: IMAGE, ref: "thumbnail" }, { kind: CONDITIONS, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
+    #    status: ACTIVE
+    #  )
+    def create(trigger:, workflow:, name: nil, description: nil, status: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
@@ -75,9 +93,14 @@ module Ittybit
         unless request_options.nil? || request_options&.additional_query_parameters.nil?
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
         end
-        unless request_options.nil? || request_options&.additional_body_parameters.nil?
-          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
-        end
+        req.body = {
+          **(request_options&.additional_body_parameters || {}),
+          name: name,
+          description: description,
+          trigger: trigger,
+          workflow: workflow,
+          status: status
+        }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/automations"
       end
       Ittybit::AutomationResponse.from_json(json_object: response.body)
@@ -114,36 +137,6 @@ module Ittybit
         req.url "#{@request_client.get_url(request_options: request_options)}/automations/#{id}"
       end
       Ittybit::AutomationResponse.from_json(json_object: response.body)
-    end
-
-    # @param id [String]
-    # @param request_options [Ittybit::RequestOptions]
-    # @return [Void]
-    # @example
-    #  api = Ittybit::Client.new(
-    #    base_url: "https://api.example.com",
-    #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
-    #  )
-    #  api.automations.update(id: "id")
-    def update(id:, request_options: nil)
-      @request_client.conn.put do |req|
-        req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-        req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
-        req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
-        req.headers = {
-      **(req.headers || {}),
-      **@request_client.get_headers,
-      **(request_options&.additional_headers || {})
-        }.compact
-        unless request_options.nil? || request_options&.additional_query_parameters.nil?
-          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-        end
-        unless request_options.nil? || request_options&.additional_body_parameters.nil?
-          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
-        end
-        req.url "#{@request_client.get_url(request_options: request_options)}/automations/#{id}"
-      end
     end
 
     # Permanently removes an automation from the system. This action cannot be undone.
@@ -185,14 +178,14 @@ module Ittybit
     # @param id [String]
     # @param name [String]
     # @param description [String]
-    # @param trigger [Hash] Request of type Ittybit::Automations::UpdateAutomationRequestTrigger, as a Hash
+    # @param trigger [Hash] Request of type Ittybit::Automations::AutomationsUpdateRequestTrigger, as a Hash
     #   * :kind (String)
     #   * :event (String)
     # @param workflow [Array<Hash>] Request of type Array<Ittybit::WorkflowTaskStep>, as a Hash
     #   * :kind (Ittybit::WorkflowTaskStepKind)
     #   * :ref (String)
     #   * :next_ (Array<Ittybit::WorkflowTaskStepNextItem>)
-    # @param status [Ittybit::Automations::UpdateAutomationRequestStatus]
+    # @param status [Ittybit::Automations::AutomationsUpdateRequestStatus]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::AutomationResponse]
     # @example
@@ -201,14 +194,13 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.automations.update_automation(
-    #    id: "auto_abcdefgh1234",
+    #  api.automations.update(
+    #    id: "id",
     #    name: "My Updated Automation",
     #    workflow: [{ kind: NSFW }, { kind: DESCRIPTION }, { kind: IMAGE, ref: "big_thumbnail" }, { kind: CONDITIONS, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
     #    status: ACTIVE
     #  )
-    def update_automation(id:, name: nil, description: nil, trigger: nil, workflow: nil, status: nil,
-                          request_options: nil)
+    def update(id:, name: nil, description: nil, trigger: nil, workflow: nil, status: nil, request_options: nil)
       response = @request_client.conn.patch do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
@@ -280,6 +272,16 @@ module Ittybit
 
     # Creates a new automation.
     #
+    # @param name [String]
+    # @param description [String]
+    # @param trigger [Hash] Request of type Ittybit::Automations::AutomationsCreateRequestTrigger, as a Hash
+    #   * :kind (String)
+    #   * :event (String)
+    # @param workflow [Array<Hash>] Request of type Array<Ittybit::WorkflowTaskStep>, as a Hash
+    #   * :kind (Ittybit::WorkflowTaskStepKind)
+    #   * :ref (String)
+    #   * :next_ (Array<Ittybit::WorkflowTaskStepNextItem>)
+    # @param status [Ittybit::Automations::AutomationsCreateRequestStatus]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::AutomationResponse]
     # @example
@@ -288,8 +290,14 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.automations.create
-    def create(request_options: nil)
+    #  api.automations.create(
+    #    name: "My Example Automation",
+    #    description: "This workflow will run whenever new media is created.",
+    #    trigger: { kind: "event", event: "media.created" },
+    #    workflow: [{ kind: DESCRIPTION }, { kind: IMAGE, ref: "thumbnail" }, { kind: CONDITIONS, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
+    #    status: ACTIVE
+    #  )
+    def create(trigger:, workflow:, name: nil, description: nil, status: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -303,9 +311,14 @@ module Ittybit
           unless request_options.nil? || request_options&.additional_query_parameters.nil?
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
           end
-          unless request_options.nil? || request_options&.additional_body_parameters.nil?
-            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
-          end
+          req.body = {
+            **(request_options&.additional_body_parameters || {}),
+            name: name,
+            description: description,
+            trigger: trigger,
+            workflow: workflow,
+            status: status
+          }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/automations"
         end
         Ittybit::AutomationResponse.from_json(json_object: response.body)
@@ -344,38 +357,6 @@ module Ittybit
           req.url "#{@request_client.get_url(request_options: request_options)}/automations/#{id}"
         end
         Ittybit::AutomationResponse.from_json(json_object: response.body)
-      end
-    end
-
-    # @param id [String]
-    # @param request_options [Ittybit::RequestOptions]
-    # @return [Void]
-    # @example
-    #  api = Ittybit::Client.new(
-    #    base_url: "https://api.example.com",
-    #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
-    #  )
-    #  api.automations.update(id: "id")
-    def update(id:, request_options: nil)
-      Async do
-        @request_client.conn.put do |req|
-          req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-          req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
-          req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
-          req.headers = {
-        **(req.headers || {}),
-        **@request_client.get_headers,
-        **(request_options&.additional_headers || {})
-          }.compact
-          unless request_options.nil? || request_options&.additional_query_parameters.nil?
-            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-          end
-          unless request_options.nil? || request_options&.additional_body_parameters.nil?
-            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
-          end
-          req.url "#{@request_client.get_url(request_options: request_options)}/automations/#{id}"
-        end
       end
     end
 
@@ -420,14 +401,14 @@ module Ittybit
     # @param id [String]
     # @param name [String]
     # @param description [String]
-    # @param trigger [Hash] Request of type Ittybit::Automations::UpdateAutomationRequestTrigger, as a Hash
+    # @param trigger [Hash] Request of type Ittybit::Automations::AutomationsUpdateRequestTrigger, as a Hash
     #   * :kind (String)
     #   * :event (String)
     # @param workflow [Array<Hash>] Request of type Array<Ittybit::WorkflowTaskStep>, as a Hash
     #   * :kind (Ittybit::WorkflowTaskStepKind)
     #   * :ref (String)
     #   * :next_ (Array<Ittybit::WorkflowTaskStepNextItem>)
-    # @param status [Ittybit::Automations::UpdateAutomationRequestStatus]
+    # @param status [Ittybit::Automations::AutomationsUpdateRequestStatus]
     # @param request_options [Ittybit::RequestOptions]
     # @return [Ittybit::AutomationResponse]
     # @example
@@ -436,14 +417,13 @@ module Ittybit
     #    environment: Ittybit::Environment::DEFAULT,
     #    token: "YOUR_AUTH_TOKEN"
     #  )
-    #  api.automations.update_automation(
-    #    id: "auto_abcdefgh1234",
+    #  api.automations.update(
+    #    id: "id",
     #    name: "My Updated Automation",
     #    workflow: [{ kind: NSFW }, { kind: DESCRIPTION }, { kind: IMAGE, ref: "big_thumbnail" }, { kind: CONDITIONS, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
     #    status: ACTIVE
     #  )
-    def update_automation(id:, name: nil, description: nil, trigger: nil, workflow: nil, status: nil,
-                          request_options: nil)
+    def update(id:, name: nil, description: nil, trigger: nil, workflow: nil, status: nil, request_options: nil)
       Async do
         response = @request_client.conn.patch do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
