@@ -13,7 +13,6 @@ module Ittybit
     DESCRIPTION = "description"
     OUTLINE = "outline"
     PROMPT = "prompt"
-    CONDITIONS = "conditions"
     HTTP = "http"
   end
 end

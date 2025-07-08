@@ -77,7 +77,7 @@ module Ittybit
     #    name: "My Example Automation",
     #    description: "This workflow will run whenever new media is created.",
     #    trigger: { kind: "event", event: "media.created" },
-    #    workflow: [{ kind: DESCRIPTION }, { kind: IMAGE, ref: "thumbnail" }, { kind: CONDITIONS, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
+    #    workflow: [{ kind: DESCRIPTION }, { kind: IMAGE, ref: "thumbnail" }, { kind: VIDEO, next_: [{ kind: "subtitles", ref: "subtitles" }] }],
     #    status: ACTIVE
     #  )
     def create(trigger:, workflow:, name: nil, description: nil, status: nil, request_options: nil)
@@ -197,7 +197,7 @@ module Ittybit
     #  api.automations.update(
     #    id: "id",
     #    name: "My Updated Automation",
-    #    workflow: [{ kind: NSFW }, { kind: DESCRIPTION }, { kind: IMAGE, ref: "big_thumbnail" }, { kind: CONDITIONS, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
+    #    workflow: [{ kind: NSFW }, { kind: DESCRIPTION }, { kind: IMAGE, ref: "big_thumbnail" }, { kind: VIDEO, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
     #    status: ACTIVE
     #  )
     def update(id:, name: nil, description: nil, trigger: nil, workflow: nil, status: nil, request_options: nil)
@@ -294,7 +294,7 @@ module Ittybit
     #    name: "My Example Automation",
     #    description: "This workflow will run whenever new media is created.",
     #    trigger: { kind: "event", event: "media.created" },
-    #    workflow: [{ kind: DESCRIPTION }, { kind: IMAGE, ref: "thumbnail" }, { kind: CONDITIONS, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
+    #    workflow: [{ kind: DESCRIPTION }, { kind: IMAGE, ref: "thumbnail" }, { kind: VIDEO, next_: [{ kind: "subtitles", ref: "subtitles" }] }],
     #    status: ACTIVE
     #  )
     def create(trigger:, workflow:, name: nil, description: nil, status: nil, request_options: nil)
@@ -420,7 +420,7 @@ module Ittybit
     #  api.automations.update(
     #    id: "id",
     #    name: "My Updated Automation",
-    #    workflow: [{ kind: NSFW }, { kind: DESCRIPTION }, { kind: IMAGE, ref: "big_thumbnail" }, { kind: CONDITIONS, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
+    #    workflow: [{ kind: NSFW }, { kind: DESCRIPTION }, { kind: IMAGE, ref: "big_thumbnail" }, { kind: VIDEO, next_: [{ kind: "subtitle", ref: "subtitle" }] }],
     #    status: ACTIVE
     #  )
     def update(id:, name: nil, description: nil, trigger: nil, workflow: nil, status: nil, request_options: nil)

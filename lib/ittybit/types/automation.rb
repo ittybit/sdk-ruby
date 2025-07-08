@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "automation_trigger"
-require_relative "workflow_task_step"
+require_relative "automation_workflow_item"
 require_relative "automation_status"
 require "date"
 require "ostruct"
@@ -17,7 +17,7 @@ module Ittybit
     attr_reader :description
     # @return [Ittybit::AutomationTrigger]
     attr_reader :trigger
-    # @return [Array<Ittybit::WorkflowTaskStep>]
+    # @return [Array<Ittybit::AutomationWorkflowItem>]
     attr_reader :workflow
     # @return [Ittybit::AutomationStatus]
     attr_reader :status
@@ -37,7 +37,7 @@ module Ittybit
     # @param name [String]
     # @param description [String]
     # @param trigger [Ittybit::AutomationTrigger]
-    # @param workflow [Array<Ittybit::WorkflowTaskStep>]
+    # @param workflow [Array<Ittybit::AutomationWorkflowItem>]
     # @param status [Ittybit::AutomationStatus]
     # @param created [DateTime]
     # @param updated [DateTime]
@@ -86,7 +86,7 @@ module Ittybit
       end
       workflow = parsed_json["workflow"]&.map do |item|
         item = item.to_json
-        Ittybit::WorkflowTaskStep.from_json(json_object: item)
+        Ittybit::AutomationWorkflowItem.from_json(json_object: item)
       end
       status = parsed_json["status"]
       created = (DateTime.parse(parsed_json["created"]) unless parsed_json["created"].nil?)
