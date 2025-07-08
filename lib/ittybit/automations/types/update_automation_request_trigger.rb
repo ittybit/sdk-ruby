@@ -5,11 +5,11 @@ require "json"
 
 module Ittybit
   class Automations
-    class AutomationsUpdateRequestTriggerConditionsItem
+    class UpdateAutomationRequestTrigger
       # @return [String]
-      attr_reader :prop
+      attr_reader :kind
       # @return [String]
-      attr_reader :value
+      attr_reader :event
       # @return [OpenStruct] Additional properties unmapped to the current class definition
       attr_reader :additional_properties
       # @return [Object]
@@ -18,36 +18,34 @@ module Ittybit
 
       OMIT = Object.new
 
-      # @param prop [String]
-      # @param value [String]
+      # @param kind [String]
+      # @param event [String]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-      # @return [Ittybit::Automations::AutomationsUpdateRequestTriggerConditionsItem]
-      def initialize(prop:, value:, additional_properties: nil)
-        @prop = prop
-        @value = value
+      # @return [Ittybit::Automations::UpdateAutomationRequestTrigger]
+      def initialize(kind:, event:, additional_properties: nil)
+        @kind = kind
+        @event = event
         @additional_properties = additional_properties
-        @_field_set = { "prop": prop, "value": value }
+        @_field_set = { "kind": kind, "event": event }
       end
 
-      # Deserialize a JSON object to an instance of
-      #  AutomationsUpdateRequestTriggerConditionsItem
+      # Deserialize a JSON object to an instance of UpdateAutomationRequestTrigger
       #
       # @param json_object [String]
-      # @return [Ittybit::Automations::AutomationsUpdateRequestTriggerConditionsItem]
+      # @return [Ittybit::Automations::UpdateAutomationRequestTrigger]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        prop = parsed_json["prop"]
-        value = parsed_json["value"]
+        kind = parsed_json["kind"]
+        event = parsed_json["event"]
         new(
-          prop: prop,
-          value: value,
+          kind: kind,
+          event: event,
           additional_properties: struct
         )
       end
 
-      # Serialize an instance of AutomationsUpdateRequestTriggerConditionsItem to a JSON
-      #  object
+      # Serialize an instance of UpdateAutomationRequestTrigger to a JSON object
       #
       # @return [String]
       def to_json(*_args)
@@ -61,8 +59,8 @@ module Ittybit
       # @param obj [Object]
       # @return [Void]
       def self.validate_raw(obj:)
-        obj.prop.is_a?(String) != false || raise("Passed value for field obj.prop is not the expected type, validation failed.")
-        obj.value.is_a?(String) != false || raise("Passed value for field obj.value is not the expected type, validation failed.")
+        obj.kind.is_a?(String) != false || raise("Passed value for field obj.kind is not the expected type, validation failed.")
+        obj.event.is_a?(String) != false || raise("Passed value for field obj.event is not the expected type, validation failed.")
       end
     end
   end

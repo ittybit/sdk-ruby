@@ -3,7 +3,6 @@
 module Ittybit
   class AutomationStatus
     ACTIVE = "active"
-    INACTIVE = "inactive"
-    DRAFT = "draft"
+    PAUSED = "paused"
   end
 end

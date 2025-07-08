@@ -48,7 +48,7 @@ module Ittybit
       Ittybit::MediaListResponse.from_json(json_object: response.body)
     end
 
-    # Creates a new media item.
+    # Creates a new media item. See [Media Object](/docs/media) for more details.
     #
     # @param title [String]
     # @param alt [String]
@@ -246,7 +246,7 @@ module Ittybit
       end
     end
 
-    # Creates a new media item.
+    # Creates a new media item. See [Media Object](/docs/media) for more details.
     #
     # @param title [String]
     # @param alt [String]

@@ -43,10 +43,10 @@ module Ittybit
     # @param updated [DateTime]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::Automation]
-    def initialize(id:, name:, trigger:, workflow:, status:, created:, updated:, description: OMIT,
+    def initialize(id:, trigger:, workflow:, status:, created:, updated:, name: OMIT, description: OMIT,
                    additional_properties: nil)
       @id = id
-      @name = name
+      @name = name if name != OMIT
       @description = description if description != OMIT
       @trigger = trigger
       @workflow = workflow
@@ -119,7 +119,7 @@ module Ittybit
     # @return [Void]
     def self.validate_raw(obj:)
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
-      obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
+      obj.name&.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.description&.is_a?(String) != false || raise("Passed value for field obj.description is not the expected type, validation failed.")
       Ittybit::AutomationTrigger.validate_raw(obj: obj.trigger)
       obj.workflow.is_a?(Array) != false || raise("Passed value for field obj.workflow is not the expected type, validation failed.")

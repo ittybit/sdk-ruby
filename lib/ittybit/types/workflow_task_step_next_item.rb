@@ -4,11 +4,11 @@ require "ostruct"
 require "json"
 
 module Ittybit
-  class AutomationTrigger
+  class WorkflowTaskStepNextItem
     # @return [String]
     attr_reader :kind
     # @return [String]
-    attr_reader :event
+    attr_reader :ref
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -18,33 +18,35 @@ module Ittybit
     OMIT = Object.new
 
     # @param kind [String]
-    # @param event [String]
+    # @param ref [String]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [Ittybit::AutomationTrigger]
-    def initialize(kind:, event:, additional_properties: nil)
-      @kind = kind
-      @event = event
+    # @return [Ittybit::WorkflowTaskStepNextItem]
+    def initialize(kind: OMIT, ref: OMIT, additional_properties: nil)
+      @kind = kind if kind != OMIT
+      @ref = ref if ref != OMIT
       @additional_properties = additional_properties
-      @_field_set = { "kind": kind, "event": event }
+      @_field_set = { "kind": kind, "ref": ref }.reject do |_k, v|
+        v == OMIT
+      end
     end
 
-    # Deserialize a JSON object to an instance of AutomationTrigger
+    # Deserialize a JSON object to an instance of WorkflowTaskStepNextItem
     #
     # @param json_object [String]
-    # @return [Ittybit::AutomationTrigger]
+    # @return [Ittybit::WorkflowTaskStepNextItem]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
       kind = parsed_json["kind"]
-      event = parsed_json["event"]
+      ref = parsed_json["ref"]
       new(
         kind: kind,
-        event: event,
+        ref: ref,
         additional_properties: struct
       )
     end
 
-    # Serialize an instance of AutomationTrigger to a JSON object
+    # Serialize an instance of WorkflowTaskStepNextItem to a JSON object
     #
     # @return [String]
     def to_json(*_args)
@@ -58,8 +60,8 @@ module Ittybit
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.kind.is_a?(String) != false || raise("Passed value for field obj.kind is not the expected type, validation failed.")
-      obj.event.is_a?(String) != false || raise("Passed value for field obj.event is not the expected type, validation failed.")
+      obj.kind&.is_a?(String) != false || raise("Passed value for field obj.kind is not the expected type, validation failed.")
+      obj.ref&.is_a?(String) != false || raise("Passed value for field obj.ref is not the expected type, validation failed.")
     end
   end
 end

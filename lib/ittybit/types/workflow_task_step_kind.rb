@@ -8,14 +8,12 @@ module Ittybit
     CHAPTERS = "chapters"
     SUBTITLES = "subtitles"
     THUMBNAILS = "thumbnails"
+    NSFW = "nsfw"
     SPEECH = "speech"
     DESCRIPTION = "description"
-    NSFW = "nsfw"
-    PROMPT = "prompt"
     OUTLINE = "outline"
-    HTTP = "http"
-    INGEST = "ingest"
-    WORKFLOW = "workflow"
+    PROMPT = "prompt"
     CONDITIONS = "conditions"
+    HTTP = "http"
   end
 end

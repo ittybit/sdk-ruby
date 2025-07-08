@@ -2,20 +2,20 @@
 
 module Ittybit
   class TaskSummaryKind
+    INGEST = "ingest"
     VIDEO = "video"
     IMAGE = "image"
     AUDIO = "audio"
     CHAPTERS = "chapters"
     SUBTITLES = "subtitles"
     THUMBNAILS = "thumbnails"
+    NSFW = "nsfw"
     SPEECH = "speech"
     DESCRIPTION = "description"
-    NSFW = "nsfw"
-    PROMPT = "prompt"
     OUTLINE = "outline"
-    HTTP = "http"
-    INGEST = "ingest"
+    PROMPT = "prompt"
     WORKFLOW = "workflow"
     CONDITIONS = "conditions"
+    HTTP = "http"
   end
 end
