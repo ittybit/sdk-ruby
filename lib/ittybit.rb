@@ -26,17 +26,17 @@ module Ittybit
     # @param environment [Ittybit::Environment]
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
-    # @param token [String]
+    # @param api_key [String]
     # @param version [String]
     # @return [Ittybit::Client]
-    def initialize(token:, base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
-                   timeout_in_seconds: nil, version: nil)
+    def initialize(base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
+                   timeout_in_seconds: nil, api_key: ENV["ITTYBIT_API_KEY"], version: nil)
       @request_client = Ittybit::RequestClient.new(
         base_url: base_url,
         environment: environment,
         max_retries: max_retries,
         timeout_in_seconds: timeout_in_seconds,
-        token: token,
+        api_key: api_key,
         version: version
       )
       @automations = Ittybit::AutomationsClient.new(request_client: @request_client)
@@ -63,17 +63,17 @@ module Ittybit
     # @param environment [Ittybit::Environment]
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
-    # @param token [String]
+    # @param api_key [String]
     # @param version [String]
     # @return [Ittybit::AsyncClient]
-    def initialize(token:, base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
-                   timeout_in_seconds: nil, version: nil)
+    def initialize(base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
+                   timeout_in_seconds: nil, api_key: ENV["ITTYBIT_API_KEY"], version: nil)
       @async_request_client = Ittybit::AsyncRequestClient.new(
         base_url: base_url,
         environment: environment,
         max_retries: max_retries,
         timeout_in_seconds: timeout_in_seconds,
-        token: token,
+        api_key: api_key,
         version: version
       )
       @automations = Ittybit::AsyncAutomationsClient.new(request_client: @async_request_client)

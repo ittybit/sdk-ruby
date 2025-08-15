@@ -27,13 +27,13 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.list
     def list(page: nil, limit: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-        req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+        req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
       **(req.headers || {}),
@@ -63,18 +63,18 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.create(
     #    url: "https://ittyb.it/sample.mp4",
     #    folder: "ittybit/samples",
     #    filename: "video.mp4",
-    #    metadata: { "customKey2": "a different custom value" }
+    #    metadata: { "customKey": "your custom value" }
     #  )
     def create(url:, media_id: nil, folder: nil, filename: nil, ref: nil, metadata: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-        req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+        req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
       **(req.headers || {}),
@@ -107,13 +107,13 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.get(id: "file_abcdefgh1234")
     def get(id:, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-        req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+        req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
       **(req.headers || {}),
@@ -140,13 +140,13 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.delete(id: "file_abcdefgh1234")
     def delete(id:, request_options: nil)
       response = @request_client.conn.delete do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-        req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+        req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
       **(req.headers || {}),
@@ -178,7 +178,7 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.update(
     #    id: "file_abcdefgh1234",
@@ -189,7 +189,7 @@ module Ittybit
     def update(id:, folder: nil, filename: nil, ref: nil, metadata: nil, request_options: nil)
       response = @request_client.conn.patch do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-        req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+        req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
       **(req.headers || {}),
@@ -232,14 +232,14 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.list
     def list(page: nil, limit: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-          req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+          req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
         **(req.headers || {}),
@@ -270,19 +270,19 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.create(
     #    url: "https://ittyb.it/sample.mp4",
     #    folder: "ittybit/samples",
     #    filename: "video.mp4",
-    #    metadata: { "customKey2": "a different custom value" }
+    #    metadata: { "customKey": "your custom value" }
     #  )
     def create(url:, media_id: nil, folder: nil, filename: nil, ref: nil, metadata: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-          req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+          req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
         **(req.headers || {}),
@@ -316,14 +316,14 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.get(id: "file_abcdefgh1234")
     def get(id:, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-          req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+          req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
         **(req.headers || {}),
@@ -351,14 +351,14 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.delete(id: "file_abcdefgh1234")
     def delete(id:, request_options: nil)
       Async do
         response = @request_client.conn.delete do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-          req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+          req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
         **(req.headers || {}),
@@ -391,7 +391,7 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.files.update(
     #    id: "file_abcdefgh1234",
@@ -403,7 +403,7 @@ module Ittybit
       Async do
         response = @request_client.conn.patch do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-          req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+          req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
         **(req.headers || {}),

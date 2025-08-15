@@ -12,7 +12,7 @@ module Ittybit
     # @return [String]
     attr_reader :base_url
     # @return [String]
-    attr_reader :token
+    attr_reader :api_key
     # @return [String]
     attr_reader :default_environment
 
@@ -20,14 +20,14 @@ module Ittybit
     # @param environment [Ittybit::Environment]
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
-    # @param token [String]
+    # @param api_key [String]
     # @param version [String]
     # @return [Ittybit::RequestClient]
-    def initialize(token:, base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
-                   timeout_in_seconds: nil, version: nil)
+    def initialize(base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
+                   timeout_in_seconds: nil, api_key: ENV["ITTYBIT_API_KEY"], version: nil)
       @default_environment = environment
       @base_url = environment || base_url
-      @token = "Bearer #{token}"
+      @api_key = "Bearer #{api_key}"
       @headers = {}
       @headers["ACCEPT_VERSION"] = version unless version.nil?
       @conn = Faraday.new(headers: @headers) do |faraday|
@@ -46,8 +46,8 @@ module Ittybit
 
     # @return [Hash{String => String}]
     def get_headers
-      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.8.7" }
-      headers["Authorization"] = ((@token.is_a? Method) ? @token.call : @token) unless @token.nil?
+      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.8.14" }
+      headers["Authorization"] = ((@api_key.is_a? Method) ? @api_key.call : @api_key) unless @api_key.nil?
       headers
     end
   end
@@ -58,7 +58,7 @@ module Ittybit
     # @return [String]
     attr_reader :base_url
     # @return [String]
-    attr_reader :token
+    attr_reader :api_key
     # @return [String]
     attr_reader :default_environment
 
@@ -66,14 +66,14 @@ module Ittybit
     # @param environment [Ittybit::Environment]
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
-    # @param token [String]
+    # @param api_key [String]
     # @param version [String]
     # @return [Ittybit::AsyncRequestClient]
-    def initialize(token:, base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
-                   timeout_in_seconds: nil, version: nil)
+    def initialize(base_url: nil, environment: Ittybit::Environment::DEFAULT, max_retries: nil,
+                   timeout_in_seconds: nil, api_key: ENV["ITTYBIT_API_KEY"], version: nil)
       @default_environment = environment
       @base_url = environment || base_url
-      @token = "Bearer #{token}"
+      @api_key = "Bearer #{api_key}"
       @headers = {}
       @headers["ACCEPT_VERSION"] = version unless version.nil?
       @conn = Faraday.new(headers: @headers) do |faraday|
@@ -93,8 +93,8 @@ module Ittybit
 
     # @return [Hash{String => String}]
     def get_headers
-      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.8.7" }
-      headers["Authorization"] = ((@token.is_a? Method) ? @token.call : @token) unless @token.nil?
+      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.8.14" }
+      headers["Authorization"] = ((@api_key.is_a? Method) ? @api_key.call : @api_key) unless @api_key.nil?
       headers
     end
   end
@@ -105,7 +105,7 @@ module Ittybit
     # @return [String]
     attr_reader :base_url
     # @return [String]
-    attr_reader :token
+    attr_reader :api_key
     # @return [String]
     attr_reader :version
     # @return [Hash{String => Object}]
@@ -118,17 +118,17 @@ module Ittybit
     attr_reader :timeout_in_seconds
 
     # @param base_url [String]
-    # @param token [String]
+    # @param api_key [String]
     # @param version [String]
     # @param additional_headers [Hash{String => Object}]
     # @param additional_query_parameters [Hash{String => Object}]
     # @param additional_body_parameters [Hash{String => Object}]
     # @param timeout_in_seconds [Long]
     # @return [Ittybit::RequestOptions]
-    def initialize(base_url: nil, token: nil, version: nil, additional_headers: nil, additional_query_parameters: nil,
-                   additional_body_parameters: nil, timeout_in_seconds: nil)
+    def initialize(base_url: nil, api_key: nil, version: nil, additional_headers: nil,
+                   additional_query_parameters: nil, additional_body_parameters: nil, timeout_in_seconds: nil)
       @base_url = base_url
-      @token = token
+      @api_key = api_key
       @version = version
       @additional_headers = additional_headers
       @additional_query_parameters = additional_query_parameters
@@ -143,7 +143,7 @@ module Ittybit
     # @return [String]
     attr_reader :base_url
     # @return [String]
-    attr_reader :token
+    attr_reader :api_key
     # @return [String]
     attr_reader :version
     # @return [Hash{String => Object}]
@@ -156,17 +156,17 @@ module Ittybit
     attr_reader :timeout_in_seconds
 
     # @param base_url [String]
-    # @param token [String]
+    # @param api_key [String]
     # @param version [String]
     # @param additional_headers [Hash{String => Object}]
     # @param additional_query_parameters [Hash{String => Object}]
     # @param additional_body_parameters [Hash{String => Object}]
     # @param timeout_in_seconds [Long]
     # @return [Ittybit::IdempotencyRequestOptions]
-    def initialize(base_url: nil, token: nil, version: nil, additional_headers: nil, additional_query_parameters: nil,
-                   additional_body_parameters: nil, timeout_in_seconds: nil)
+    def initialize(base_url: nil, api_key: nil, version: nil, additional_headers: nil,
+                   additional_query_parameters: nil, additional_body_parameters: nil, timeout_in_seconds: nil)
       @base_url = base_url
-      @token = token
+      @api_key = api_key
       @version = version
       @additional_headers = additional_headers
       @additional_query_parameters = additional_query_parameters

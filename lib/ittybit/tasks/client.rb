@@ -17,6 +17,8 @@ module Ittybit
       @request_client = request_client
     end
 
+    # Retrieves a paginated list of all tasks for the current project.
+    #
     # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
@@ -25,13 +27,13 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.tasks.list
     def list(page: nil, limit: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-        req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+        req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
       **(req.headers || {}),
@@ -57,13 +59,13 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.tasks.create(request: {"file_id":"file_abcdefgh1234","kind":"image","width":320,"format":"png","ref":"thumbnail"})
     def create(request: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-        req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+        req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
       **(req.headers || {}),
@@ -88,13 +90,13 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.tasks.get(id: "task_abcdefgh1234")
     def get(id:, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-        req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+        req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
       **(req.headers || {}),
@@ -120,13 +122,13 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.tasks.get_task_config
     def get_task_config(request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-        req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+        req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
       **(req.headers || {}),
@@ -155,6 +157,8 @@ module Ittybit
       @request_client = request_client
     end
 
+    # Retrieves a paginated list of all tasks for the current project.
+    #
     # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
@@ -163,14 +167,14 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.tasks.list
     def list(page: nil, limit: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-          req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+          req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
         **(req.headers || {}),
@@ -197,14 +201,14 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.tasks.create(request: {"file_id":"file_abcdefgh1234","kind":"image","width":320,"format":"png","ref":"thumbnail"})
     def create(request: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-          req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+          req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
         **(req.headers || {}),
@@ -230,14 +234,14 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.tasks.get(id: "task_abcdefgh1234")
     def get(id:, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-          req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+          req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
         **(req.headers || {}),
@@ -264,14 +268,14 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.tasks.get_task_config
     def get_task_config(request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-          req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+          req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
         **(req.headers || {}),

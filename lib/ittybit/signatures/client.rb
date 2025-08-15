@@ -31,7 +31,7 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.signatures.create(
     #    filename: "video.mp4",
@@ -42,7 +42,7 @@ module Ittybit
     def create(filename:, folder: nil, expiry: nil, method: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-        req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+        req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
       **(req.headers || {}),
@@ -90,7 +90,7 @@ module Ittybit
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: Ittybit::Environment::DEFAULT,
-    #    token: "YOUR_AUTH_TOKEN"
+    #    api_key: "YOUR_AUTH_TOKEN"
     #  )
     #  api.signatures.create(
     #    filename: "video.mp4",
@@ -102,7 +102,7 @@ module Ittybit
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-          req.headers["Authorization"] = request_options.token unless request_options&.token.nil?
+          req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
         **(req.headers || {}),
