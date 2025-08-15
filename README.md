@@ -34,7 +34,7 @@ require 'ittybit'
 
 # Initialize the client
 client = Ittybit::Client.new(
-  token: "YOUR_TOKEN",
+  api_key: "YOUR_TOKEN",
   version: "YOUR_VERSION" # Optional
 )
 
@@ -71,7 +71,7 @@ require 'async'
 
 Async do
   client = Ittybit::AsyncClient.new(
-    token: "YOUR_TOKEN",
+    api_key: "YOUR_TOKEN",
     version: "YOUR_VERSION"
   )
 
