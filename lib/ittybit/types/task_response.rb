@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require_relative "meta"
-require_relative "task"
-require_relative "error"
-require_relative "links"
+require_relative "task_response_meta"
+require_relative "task_response_data"
+require_relative "task_response_error"
+require_relative "task_response_links"
 require "ostruct"
 require "json"
 
 module Ittybit
   class TaskResponse
-    # @return [Ittybit::META]
+    # @return [Ittybit::TaskResponseMeta]
     attr_reader :meta
-    # @return [Ittybit::Task]
+    # @return [Ittybit::TaskResponseData]
     attr_reader :data
-    # @return [Ittybit::Error]
+    # @return [Ittybit::TaskResponseError]
     attr_reader :error
-    # @return [Ittybit::Links]
+    # @return [Ittybit::TaskResponseLinks]
     attr_reader :links
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -25,10 +25,10 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param meta [Ittybit::META]
-    # @param data [Ittybit::Task]
-    # @param error [Ittybit::Error]
-    # @param links [Ittybit::Links]
+    # @param meta [Ittybit::TaskResponseMeta]
+    # @param data [Ittybit::TaskResponseData]
+    # @param error [Ittybit::TaskResponseError]
+    # @param links [Ittybit::TaskResponseLinks]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::TaskResponse]
     def initialize(meta: OMIT, data: OMIT, error: OMIT, links: OMIT, additional_properties: nil)
@@ -49,24 +49,29 @@ module Ittybit
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
-      meta = parsed_json["meta"]
+      if parsed_json["meta"].nil?
+        meta = nil
+      else
+        meta = parsed_json["meta"].to_json
+        meta = Ittybit::TaskResponseMeta.from_json(json_object: meta)
+      end
       if parsed_json["data"].nil?
         data = nil
       else
         data = parsed_json["data"].to_json
-        data = Ittybit::Task.from_json(json_object: data)
+        data = Ittybit::TaskResponseData.from_json(json_object: data)
       end
       if parsed_json["error"].nil?
         error = nil
       else
         error = parsed_json["error"].to_json
-        error = Ittybit::Error.from_json(json_object: error)
+        error = Ittybit::TaskResponseError.from_json(json_object: error)
       end
       if parsed_json["links"].nil?
         links = nil
       else
         links = parsed_json["links"].to_json
-        links = Ittybit::Links.from_json(json_object: links)
+        links = Ittybit::TaskResponseLinks.from_json(json_object: links)
       end
       new(
         meta: meta,
@@ -91,10 +96,10 @@ module Ittybit
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.meta&.is_a?(Object) != false || raise("Passed value for field obj.meta is not the expected type, validation failed.")
-      obj.data.nil? || Ittybit::Task.validate_raw(obj: obj.data)
-      obj.error.nil? || Ittybit::Error.validate_raw(obj: obj.error)
-      obj.links.nil? || Ittybit::Links.validate_raw(obj: obj.links)
+      obj.meta.nil? || Ittybit::TaskResponseMeta.validate_raw(obj: obj.meta)
+      obj.data.nil? || Ittybit::TaskResponseData.validate_raw(obj: obj.data)
+      obj.error.nil? || Ittybit::TaskResponseError.validate_raw(obj: obj.error)
+      obj.links.nil? || Ittybit::TaskResponseLinks.validate_raw(obj: obj.links)
     end
   end
 end

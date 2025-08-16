@@ -1,14 +1,17 @@
 # frozen_string_literal: true
 
 require_relative "../../requests"
-require_relative "../types/automation_list_response"
+require_relative "types/automations_list_response"
 require_relative "types/automations_create_request_trigger"
-require_relative "../types/workflow_task_step"
+require_relative "types/automations_create_request_workflow_item"
 require_relative "types/automations_create_request_status"
-require_relative "../types/automation_response"
-require_relative "../types/confirmation_response"
+require_relative "types/automations_create_response"
+require_relative "types/automations_get_response"
+require_relative "types/automations_delete_response"
 require_relative "types/automations_update_request_trigger"
+require_relative "types/automations_update_request_workflow_item"
 require_relative "types/automations_update_request_status"
+require_relative "types/automations_update_response"
 require "async"
 
 module Ittybit
@@ -27,7 +30,7 @@ module Ittybit
     # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::AutomationListResponse]
+    # @return [Ittybit::Automations::AutomationsListResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -51,7 +54,7 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/automations"
       end
-      Ittybit::AutomationListResponse.from_json(json_object: response.body)
+      Ittybit::Automations::AutomationsListResponse.from_json(json_object: response.body)
     end
 
     # Creates a new automation.
@@ -61,13 +64,13 @@ module Ittybit
     # @param trigger [Hash] Request of type Ittybit::Automations::AutomationsCreateRequestTrigger, as a Hash
     #   * :kind (String)
     #   * :event (String)
-    # @param workflow [Array<Hash>] Request of type Array<Ittybit::WorkflowTaskStep>, as a Hash
-    #   * :kind (Ittybit::WorkflowTaskStepKind)
+    # @param workflow [Array<Hash>] Request of type Array<Ittybit::Automations::AutomationsCreateRequestWorkflowItem>, as a Hash
+    #   * :kind (Ittybit::Automations::AutomationsCreateRequestWorkflowItemKind)
     #   * :ref (String)
-    #   * :next_ (Array<Ittybit::WorkflowTaskStepNextItem>)
+    #   * :next_ (Array<Ittybit::Automations::AutomationsCreateRequestWorkflowItemNextItem>)
     # @param status [Ittybit::Automations::AutomationsCreateRequestStatus]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::AutomationResponse]
+    # @return [Ittybit::Automations::AutomationsCreateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -104,14 +107,14 @@ module Ittybit
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/automations"
       end
-      Ittybit::AutomationResponse.from_json(json_object: response.body)
+      Ittybit::Automations::AutomationsCreateResponse.from_json(json_object: response.body)
     end
 
     # Retrieve the automation object for a automation with the given ID.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::AutomationResponse]
+    # @return [Ittybit::Automations::AutomationsGetResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -137,14 +140,14 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/automations/#{id}"
       end
-      Ittybit::AutomationResponse.from_json(json_object: response.body)
+      Ittybit::Automations::AutomationsGetResponse.from_json(json_object: response.body)
     end
 
     # Permanently removes an automation from the system. This action cannot be undone.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::ConfirmationResponse]
+    # @return [Ittybit::Automations::AutomationsDeleteResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -170,7 +173,7 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/automations/#{id}"
       end
-      Ittybit::ConfirmationResponse.from_json(json_object: response.body)
+      Ittybit::Automations::AutomationsDeleteResponse.from_json(json_object: response.body)
     end
 
     # Updates an automation's `name`, `description`, `trigger`, `workflow`, or
@@ -182,13 +185,13 @@ module Ittybit
     # @param trigger [Hash] Request of type Ittybit::Automations::AutomationsUpdateRequestTrigger, as a Hash
     #   * :kind (String)
     #   * :event (String)
-    # @param workflow [Array<Hash>] Request of type Array<Ittybit::WorkflowTaskStep>, as a Hash
-    #   * :kind (Ittybit::WorkflowTaskStepKind)
+    # @param workflow [Array<Hash>] Request of type Array<Ittybit::Automations::AutomationsUpdateRequestWorkflowItem>, as a Hash
+    #   * :kind (Ittybit::Automations::AutomationsUpdateRequestWorkflowItemKind)
     #   * :ref (String)
-    #   * :next_ (Array<Ittybit::WorkflowTaskStepNextItem>)
+    #   * :next_ (Array<Ittybit::Automations::AutomationsUpdateRequestWorkflowItemNextItem>)
     # @param status [Ittybit::Automations::AutomationsUpdateRequestStatus]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::AutomationResponse]
+    # @return [Ittybit::Automations::AutomationsUpdateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -224,7 +227,7 @@ module Ittybit
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/automations/#{id}"
       end
-      Ittybit::AutomationResponse.from_json(json_object: response.body)
+      Ittybit::Automations::AutomationsUpdateResponse.from_json(json_object: response.body)
     end
   end
 
@@ -243,7 +246,7 @@ module Ittybit
     # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::AutomationListResponse]
+    # @return [Ittybit::Automations::AutomationsListResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -268,7 +271,7 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/automations"
         end
-        Ittybit::AutomationListResponse.from_json(json_object: response.body)
+        Ittybit::Automations::AutomationsListResponse.from_json(json_object: response.body)
       end
     end
 
@@ -279,13 +282,13 @@ module Ittybit
     # @param trigger [Hash] Request of type Ittybit::Automations::AutomationsCreateRequestTrigger, as a Hash
     #   * :kind (String)
     #   * :event (String)
-    # @param workflow [Array<Hash>] Request of type Array<Ittybit::WorkflowTaskStep>, as a Hash
-    #   * :kind (Ittybit::WorkflowTaskStepKind)
+    # @param workflow [Array<Hash>] Request of type Array<Ittybit::Automations::AutomationsCreateRequestWorkflowItem>, as a Hash
+    #   * :kind (Ittybit::Automations::AutomationsCreateRequestWorkflowItemKind)
     #   * :ref (String)
-    #   * :next_ (Array<Ittybit::WorkflowTaskStepNextItem>)
+    #   * :next_ (Array<Ittybit::Automations::AutomationsCreateRequestWorkflowItemNextItem>)
     # @param status [Ittybit::Automations::AutomationsCreateRequestStatus]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::AutomationResponse]
+    # @return [Ittybit::Automations::AutomationsCreateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -323,7 +326,7 @@ module Ittybit
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/automations"
         end
-        Ittybit::AutomationResponse.from_json(json_object: response.body)
+        Ittybit::Automations::AutomationsCreateResponse.from_json(json_object: response.body)
       end
     end
 
@@ -331,7 +334,7 @@ module Ittybit
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::AutomationResponse]
+    # @return [Ittybit::Automations::AutomationsGetResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -358,7 +361,7 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/automations/#{id}"
         end
-        Ittybit::AutomationResponse.from_json(json_object: response.body)
+        Ittybit::Automations::AutomationsGetResponse.from_json(json_object: response.body)
       end
     end
 
@@ -366,7 +369,7 @@ module Ittybit
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::ConfirmationResponse]
+    # @return [Ittybit::Automations::AutomationsDeleteResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -393,7 +396,7 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/automations/#{id}"
         end
-        Ittybit::ConfirmationResponse.from_json(json_object: response.body)
+        Ittybit::Automations::AutomationsDeleteResponse.from_json(json_object: response.body)
       end
     end
 
@@ -406,13 +409,13 @@ module Ittybit
     # @param trigger [Hash] Request of type Ittybit::Automations::AutomationsUpdateRequestTrigger, as a Hash
     #   * :kind (String)
     #   * :event (String)
-    # @param workflow [Array<Hash>] Request of type Array<Ittybit::WorkflowTaskStep>, as a Hash
-    #   * :kind (Ittybit::WorkflowTaskStepKind)
+    # @param workflow [Array<Hash>] Request of type Array<Ittybit::Automations::AutomationsUpdateRequestWorkflowItem>, as a Hash
+    #   * :kind (Ittybit::Automations::AutomationsUpdateRequestWorkflowItemKind)
     #   * :ref (String)
-    #   * :next_ (Array<Ittybit::WorkflowTaskStepNextItem>)
+    #   * :next_ (Array<Ittybit::Automations::AutomationsUpdateRequestWorkflowItemNextItem>)
     # @param status [Ittybit::Automations::AutomationsUpdateRequestStatus]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::AutomationResponse]
+    # @return [Ittybit::Automations::AutomationsUpdateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -449,7 +452,7 @@ module Ittybit
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/automations/#{id}"
         end
-        Ittybit::AutomationResponse.from_json(json_object: response.body)
+        Ittybit::Automations::AutomationsUpdateResponse.from_json(json_object: response.body)
       end
     end
   end

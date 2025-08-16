@@ -46,7 +46,7 @@ module Ittybit
 
     # @return [Hash{String => String}]
     def get_headers
-      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.8.14" }
+      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.9.0" }
       headers["Authorization"] = ((@api_key.is_a? Method) ? @api_key.call : @api_key) unless @api_key.nil?
       headers
     end
@@ -93,7 +93,7 @@ module Ittybit
 
     # @return [Hash{String => String}]
     def get_headers
-      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.8.14" }
+      headers = { "X-Fern-Language": "Ruby", "X-Fern-SDK-Name": "ittybit", "X-Fern-SDK-Version": "0.9.0" }
       headers["Authorization"] = ((@api_key.is_a? Method) ? @api_key.call : @api_key) unless @api_key.nil?
       headers
     end

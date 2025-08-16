@@ -2,7 +2,7 @@
 
 require_relative "../../requests"
 require_relative "types/signatures_create_request_method"
-require_relative "../types/signature_response"
+require_relative "types/signatures_create_response"
 require "async"
 
 module Ittybit
@@ -26,7 +26,7 @@ module Ittybit
     # @param expiry [Integer]
     # @param method [Ittybit::Signatures::SignaturesCreateRequestMethod]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::SignatureResponse]
+    # @return [Ittybit::Signatures::SignaturesCreateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -61,7 +61,7 @@ module Ittybit
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/signatures"
       end
-      Ittybit::SignatureResponse.from_json(json_object: response.body)
+      Ittybit::Signatures::SignaturesCreateResponse.from_json(json_object: response.body)
     end
   end
 
@@ -85,7 +85,7 @@ module Ittybit
     # @param expiry [Integer]
     # @param method [Ittybit::Signatures::SignaturesCreateRequestMethod]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::SignatureResponse]
+    # @return [Ittybit::Signatures::SignaturesCreateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -121,7 +121,7 @@ module Ittybit
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/signatures"
         end
-        Ittybit::SignatureResponse.from_json(json_object: response.body)
+        Ittybit::Signatures::SignaturesCreateResponse.from_json(json_object: response.body)
       end
     end
   end

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require_relative "../../requests"
-require_relative "../types/task_list_response"
-require_relative "../types/task_response"
+require_relative "types/tasks_list_response"
+require_relative "types/tasks_create_response"
+require_relative "types/tasks_get_response"
 require "json"
 require "async"
 
@@ -22,7 +23,7 @@ module Ittybit
     # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::TaskListResponse]
+    # @return [Ittybit::Tasks::TasksListResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -46,7 +47,7 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/tasks"
       end
-      Ittybit::TaskListResponse.from_json(json_object: response.body)
+      Ittybit::Tasks::TasksListResponse.from_json(json_object: response.body)
     end
 
     # Creates a new task item. See [Tasks](/docs/tasks) for detailed coverage of all
@@ -54,7 +55,7 @@ module Ittybit
     #
     # @param request [Object]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::TaskResponse]
+    # @return [Ittybit::Tasks::TasksCreateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -78,14 +79,14 @@ module Ittybit
         req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/tasks"
       end
-      Ittybit::TaskResponse.from_json(json_object: response.body)
+      Ittybit::Tasks::TasksCreateResponse.from_json(json_object: response.body)
     end
 
     # Retrieves the task object for a task with the given ID.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::TaskResponse]
+    # @return [Ittybit::Tasks::TasksGetResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -111,7 +112,7 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/tasks/#{id}"
       end
-      Ittybit::TaskResponse.from_json(json_object: response.body)
+      Ittybit::Tasks::TasksGetResponse.from_json(json_object: response.body)
     end
 
     # Retrieves available task kinds and their configuration options.
@@ -162,7 +163,7 @@ module Ittybit
     # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::TaskListResponse]
+    # @return [Ittybit::Tasks::TasksListResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -187,7 +188,7 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/tasks"
         end
-        Ittybit::TaskListResponse.from_json(json_object: response.body)
+        Ittybit::Tasks::TasksListResponse.from_json(json_object: response.body)
       end
     end
 
@@ -196,7 +197,7 @@ module Ittybit
     #
     # @param request [Object]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::TaskResponse]
+    # @return [Ittybit::Tasks::TasksCreateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -221,7 +222,7 @@ module Ittybit
           req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/tasks"
         end
-        Ittybit::TaskResponse.from_json(json_object: response.body)
+        Ittybit::Tasks::TasksCreateResponse.from_json(json_object: response.body)
       end
     end
 
@@ -229,7 +230,7 @@ module Ittybit
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::TaskResponse]
+    # @return [Ittybit::Tasks::TasksGetResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -256,7 +257,7 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/tasks/#{id}"
         end
-        Ittybit::TaskResponse.from_json(json_object: response.body)
+        Ittybit::Tasks::TasksGetResponse.from_json(json_object: response.body)
       end
     end
 

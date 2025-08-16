@@ -2,8 +2,10 @@
 
 require_relative "../../requests"
 require_relative "../types/media_list_response"
-require_relative "../types/media_response"
-require_relative "../types/confirmation_response"
+require_relative "types/media_create_response"
+require_relative "types/media_get_response"
+require_relative "types/media_delete_response"
+require_relative "types/media_update_response"
 require "async"
 
 module Ittybit
@@ -55,7 +57,7 @@ module Ittybit
     # @param alt [String]
     # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::MediaResponse]
+    # @return [Ittybit::Media::MediaCreateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -88,14 +90,14 @@ module Ittybit
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/media"
       end
-      Ittybit::MediaResponse.from_json(json_object: response.body)
+      Ittybit::Media::MediaCreateResponse.from_json(json_object: response.body)
     end
 
     # Retrieves the media object for a media with the given ID.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::MediaResponse]
+    # @return [Ittybit::Media::MediaGetResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -121,7 +123,7 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/media/#{id}"
       end
-      Ittybit::MediaResponse.from_json(json_object: response.body)
+      Ittybit::Media::MediaGetResponse.from_json(json_object: response.body)
     end
 
     # Permanently removes a media object from the system. This action cannot be
@@ -129,7 +131,7 @@ module Ittybit
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::ConfirmationResponse]
+    # @return [Ittybit::Media::MediaDeleteResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -155,7 +157,7 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/media/#{id}"
       end
-      Ittybit::ConfirmationResponse.from_json(json_object: response.body)
+      Ittybit::Media::MediaDeleteResponse.from_json(json_object: response.body)
     end
 
     # Updates a media object's `title`, `alt`, or `metadata`. Only the specified
@@ -166,7 +168,7 @@ module Ittybit
     # @param alt [String]
     # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::MediaResponse]
+    # @return [Ittybit::Media::MediaUpdateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -200,7 +202,7 @@ module Ittybit
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/media/#{id}"
       end
-      Ittybit::MediaResponse.from_json(json_object: response.body)
+      Ittybit::Media::MediaUpdateResponse.from_json(json_object: response.body)
     end
   end
 
@@ -254,7 +256,7 @@ module Ittybit
     # @param alt [String]
     # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::MediaResponse]
+    # @return [Ittybit::Media::MediaCreateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -288,7 +290,7 @@ module Ittybit
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/media"
         end
-        Ittybit::MediaResponse.from_json(json_object: response.body)
+        Ittybit::Media::MediaCreateResponse.from_json(json_object: response.body)
       end
     end
 
@@ -296,7 +298,7 @@ module Ittybit
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::MediaResponse]
+    # @return [Ittybit::Media::MediaGetResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -323,7 +325,7 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/media/#{id}"
         end
-        Ittybit::MediaResponse.from_json(json_object: response.body)
+        Ittybit::Media::MediaGetResponse.from_json(json_object: response.body)
       end
     end
 
@@ -332,7 +334,7 @@ module Ittybit
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::ConfirmationResponse]
+    # @return [Ittybit::Media::MediaDeleteResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -359,7 +361,7 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/media/#{id}"
         end
-        Ittybit::ConfirmationResponse.from_json(json_object: response.body)
+        Ittybit::Media::MediaDeleteResponse.from_json(json_object: response.body)
       end
     end
 
@@ -371,7 +373,7 @@ module Ittybit
     # @param alt [String]
     # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::MediaResponse]
+    # @return [Ittybit::Media::MediaUpdateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -406,7 +408,7 @@ module Ittybit
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/media/#{id}"
         end
-        Ittybit::MediaResponse.from_json(json_object: response.body)
+        Ittybit::Media::MediaUpdateResponse.from_json(json_object: response.body)
       end
     end
   end

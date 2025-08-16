@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require "json"
-require_relative "workflow_task_step"
-require_relative "conditions_task_step"
+require_relative "automation_workflow_item_ref"
+require_relative "automation_workflow_item_conditions"
 
 module Ittybit
   class AutomationWorkflowItem
@@ -13,16 +13,16 @@ module Ittybit
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       begin
-        Ittybit::WorkflowTaskStep.validate_raw(obj: struct)
-        return Ittybit::WorkflowTaskStep.from_json(json_object: struct) unless struct.nil?
+        Ittybit::AutomationWorkflowItemRef.validate_raw(obj: struct)
+        return Ittybit::AutomationWorkflowItemRef.from_json(json_object: struct) unless struct.nil?
 
         return nil
       rescue StandardError
         # noop
       end
       begin
-        Ittybit::ConditionsTaskStep.validate_raw(obj: struct)
-        return Ittybit::ConditionsTaskStep.from_json(json_object: struct) unless struct.nil?
+        Ittybit::AutomationWorkflowItemConditions.validate_raw(obj: struct)
+        return Ittybit::AutomationWorkflowItemConditions.from_json(json_object: struct) unless struct.nil?
 
         return nil
       rescue StandardError
@@ -39,12 +39,12 @@ module Ittybit
     # @return [Void]
     def self.validate_raw(obj:)
       begin
-        return Ittybit::WorkflowTaskStep.validate_raw(obj: obj)
+        return Ittybit::AutomationWorkflowItemRef.validate_raw(obj: obj)
       rescue StandardError
         # noop
       end
       begin
-        return Ittybit::ConditionsTaskStep.validate_raw(obj: obj)
+        return Ittybit::AutomationWorkflowItemConditions.validate_raw(obj: obj)
       rescue StandardError
         # noop
       end

@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require_relative "../../requests"
-require_relative "../types/file_list_response"
-require_relative "../types/file_response"
-require_relative "../types/confirmation_response"
+require_relative "types/files_list_response"
+require_relative "types/files_create_response"
+require_relative "types/files_get_response"
+require_relative "types/files_delete_response"
+require_relative "types/files_update_response"
 require "async"
 
 module Ittybit
@@ -22,7 +24,7 @@ module Ittybit
     # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::FileListResponse]
+    # @return [Ittybit::Files::FilesListResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -46,7 +48,7 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/files"
       end
-      Ittybit::FileListResponse.from_json(json_object: response.body)
+      Ittybit::Files::FilesListResponse.from_json(json_object: response.body)
     end
 
     # Creates a new file from a publicly accessible or signed URL.
@@ -58,7 +60,7 @@ module Ittybit
     # @param ref [String]
     # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::FileResponse]
+    # @return [Ittybit::Files::FilesCreateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -95,14 +97,14 @@ module Ittybit
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/files"
       end
-      Ittybit::FileResponse.from_json(json_object: response.body)
+      Ittybit::Files::FilesCreateResponse.from_json(json_object: response.body)
     end
 
     # Retrieve the file object for a file with the given ID.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::FileResponse]
+    # @return [Ittybit::Files::FilesGetResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -128,14 +130,14 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/files/#{id}"
       end
-      Ittybit::FileResponse.from_json(json_object: response.body)
+      Ittybit::Files::FilesGetResponse.from_json(json_object: response.body)
     end
 
     # Permanently removes a file from the system. This action cannot be undone.
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::ConfirmationResponse]
+    # @return [Ittybit::Files::FilesDeleteResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -161,7 +163,7 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/files/#{id}"
       end
-      Ittybit::ConfirmationResponse.from_json(json_object: response.body)
+      Ittybit::Files::FilesDeleteResponse.from_json(json_object: response.body)
     end
 
     # Update a file's `filename`, `folder`, `ref`, or `metadata`. Only the specified
@@ -173,7 +175,7 @@ module Ittybit
     # @param ref [String]
     # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::FileResponse]
+    # @return [Ittybit::Files::FilesUpdateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -208,7 +210,7 @@ module Ittybit
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/files/#{id}"
       end
-      Ittybit::FileResponse.from_json(json_object: response.body)
+      Ittybit::Files::FilesUpdateResponse.from_json(json_object: response.body)
     end
   end
 
@@ -227,7 +229,7 @@ module Ittybit
     # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::FileListResponse]
+    # @return [Ittybit::Files::FilesListResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -252,7 +254,7 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/files"
         end
-        Ittybit::FileListResponse.from_json(json_object: response.body)
+        Ittybit::Files::FilesListResponse.from_json(json_object: response.body)
       end
     end
 
@@ -265,7 +267,7 @@ module Ittybit
     # @param ref [String]
     # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::FileResponse]
+    # @return [Ittybit::Files::FilesCreateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -303,7 +305,7 @@ module Ittybit
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/files"
         end
-        Ittybit::FileResponse.from_json(json_object: response.body)
+        Ittybit::Files::FilesCreateResponse.from_json(json_object: response.body)
       end
     end
 
@@ -311,7 +313,7 @@ module Ittybit
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::FileResponse]
+    # @return [Ittybit::Files::FilesGetResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -338,7 +340,7 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/files/#{id}"
         end
-        Ittybit::FileResponse.from_json(json_object: response.body)
+        Ittybit::Files::FilesGetResponse.from_json(json_object: response.body)
       end
     end
 
@@ -346,7 +348,7 @@ module Ittybit
     #
     # @param id [String]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::ConfirmationResponse]
+    # @return [Ittybit::Files::FilesDeleteResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -373,7 +375,7 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/files/#{id}"
         end
-        Ittybit::ConfirmationResponse.from_json(json_object: response.body)
+        Ittybit::Files::FilesDeleteResponse.from_json(json_object: response.body)
       end
     end
 
@@ -386,7 +388,7 @@ module Ittybit
     # @param ref [String]
     # @param metadata [Hash{String => Object}]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::FileResponse]
+    # @return [Ittybit::Files::FilesUpdateResponse]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -422,7 +424,7 @@ module Ittybit
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/files/#{id}"
         end
-        Ittybit::FileResponse.from_json(json_object: response.body)
+        Ittybit::Files::FilesUpdateResponse.from_json(json_object: response.body)
       end
     end
   end

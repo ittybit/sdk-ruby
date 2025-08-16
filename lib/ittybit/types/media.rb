@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "media_kind"
-require_relative "media_source"
+require_relative "media_files_item"
 require "date"
 require "ostruct"
 require "json"
@@ -24,7 +24,7 @@ module Ittybit
     attr_reader :height
     # @return [Float]
     attr_reader :duration
-    # @return [Array<Ittybit::MediaSource>]
+    # @return [Array<Ittybit::MediaFilesItem>]
     attr_reader :files
     # @return [Hash{String => Object}]
     attr_reader :urls
@@ -52,7 +52,7 @@ module Ittybit
     # @param width [Integer]
     # @param height [Integer]
     # @param duration [Float]
-    # @param files [Array<Ittybit::MediaSource>]
+    # @param files [Array<Ittybit::MediaFilesItem>]
     # @param urls [Hash{String => Object}]
     # @param background [String]
     # @param metadata [Hash{String => Object}]
@@ -114,7 +114,7 @@ module Ittybit
       duration = parsed_json["duration"]
       files = parsed_json["files"]&.map do |item|
         item = item.to_json
-        Ittybit::MediaSource.from_json(json_object: item)
+        Ittybit::MediaFilesItem.from_json(json_object: item)
       end
       urls = parsed_json["urls"]
       background = parsed_json["background"]

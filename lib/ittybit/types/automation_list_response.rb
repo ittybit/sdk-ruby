@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require_relative "meta_list"
-require_relative "automation"
-require_relative "error"
-require_relative "links_list"
+require_relative "automation_list_response_meta"
+require_relative "automation_list_response_data_item"
+require_relative "automation_list_response_error"
+require_relative "automation_list_response_links"
 require "ostruct"
 require "json"
 
 module Ittybit
   class AutomationListResponse
-    # @return [Ittybit::MetaList]
+    # @return [Ittybit::AutomationListResponseMeta]
     attr_reader :meta
-    # @return [Array<Ittybit::Automation>]
+    # @return [Array<Ittybit::AutomationListResponseDataItem>]
     attr_reader :data
-    # @return [Ittybit::Error]
+    # @return [Ittybit::AutomationListResponseError]
     attr_reader :error
-    # @return [Ittybit::LinksList]
+    # @return [Ittybit::AutomationListResponseLinks]
     attr_reader :links
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -25,10 +25,10 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param meta [Ittybit::MetaList]
-    # @param data [Array<Ittybit::Automation>]
-    # @param error [Ittybit::Error]
-    # @param links [Ittybit::LinksList]
+    # @param meta [Ittybit::AutomationListResponseMeta]
+    # @param data [Array<Ittybit::AutomationListResponseDataItem>]
+    # @param error [Ittybit::AutomationListResponseError]
+    # @param links [Ittybit::AutomationListResponseLinks]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::AutomationListResponse]
     def initialize(meta: OMIT, data: OMIT, error: OMIT, links: OMIT, additional_properties: nil)
@@ -53,23 +53,23 @@ module Ittybit
         meta = nil
       else
         meta = parsed_json["meta"].to_json
-        meta = Ittybit::MetaList.from_json(json_object: meta)
+        meta = Ittybit::AutomationListResponseMeta.from_json(json_object: meta)
       end
       data = parsed_json["data"]&.map do |item|
         item = item.to_json
-        Ittybit::Automation.from_json(json_object: item)
+        Ittybit::AutomationListResponseDataItem.from_json(json_object: item)
       end
       if parsed_json["error"].nil?
         error = nil
       else
         error = parsed_json["error"].to_json
-        error = Ittybit::Error.from_json(json_object: error)
+        error = Ittybit::AutomationListResponseError.from_json(json_object: error)
       end
       if parsed_json["links"].nil?
         links = nil
       else
         links = parsed_json["links"].to_json
-        links = Ittybit::LinksList.from_json(json_object: links)
+        links = Ittybit::AutomationListResponseLinks.from_json(json_object: links)
       end
       new(
         meta: meta,
@@ -94,10 +94,10 @@ module Ittybit
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.meta.nil? || Ittybit::MetaList.validate_raw(obj: obj.meta)
+      obj.meta.nil? || Ittybit::AutomationListResponseMeta.validate_raw(obj: obj.meta)
       obj.data&.is_a?(Array) != false || raise("Passed value for field obj.data is not the expected type, validation failed.")
-      obj.error.nil? || Ittybit::Error.validate_raw(obj: obj.error)
-      obj.links.nil? || Ittybit::LinksList.validate_raw(obj: obj.links)
+      obj.error.nil? || Ittybit::AutomationListResponseError.validate_raw(obj: obj.error)
+      obj.links.nil? || Ittybit::AutomationListResponseLinks.validate_raw(obj: obj.links)
     end
   end
 end
