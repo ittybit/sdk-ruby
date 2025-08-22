@@ -1,23 +1,42 @@
 # frozen_string_literal: true
 
-require_relative "media_update_response_meta"
-require_relative "media_update_response_data"
-require_relative "media_update_response_error"
-require_relative "media_update_response_links"
+require_relative "media_update_response_kind"
+require_relative "media_update_response_files_item"
+require "date"
 require "ostruct"
 require "json"
 
 module Ittybit
   class Media
     class MediaUpdateResponse
-      # @return [Ittybit::Media::MediaUpdateResponseMeta]
-      attr_reader :meta
-      # @return [Ittybit::Media::MediaUpdateResponseData]
-      attr_reader :data
-      # @return [Ittybit::Media::MediaUpdateResponseError]
-      attr_reader :error
-      # @return [Ittybit::Media::MediaUpdateResponseLinks]
-      attr_reader :links
+      # @return [String]
+      attr_reader :id
+      # @return [String]
+      attr_reader :object
+      # @return [Ittybit::Media::MediaUpdateResponseKind]
+      attr_reader :kind
+      # @return [String]
+      attr_reader :title
+      # @return [String]
+      attr_reader :alt
+      # @return [Integer]
+      attr_reader :width
+      # @return [Integer]
+      attr_reader :height
+      # @return [Float]
+      attr_reader :duration
+      # @return [Array<Ittybit::Media::MediaUpdateResponseFilesItem>]
+      attr_reader :files
+      # @return [Hash{String => Object}]
+      attr_reader :urls
+      # @return [String]
+      attr_reader :background
+      # @return [Hash{String => Object}]
+      attr_reader :metadata
+      # @return [DateTime]
+      attr_reader :created
+      # @return [DateTime]
+      attr_reader :updated
       # @return [OpenStruct] Additional properties unmapped to the current class definition
       attr_reader :additional_properties
       # @return [Object]
@@ -26,19 +45,55 @@ module Ittybit
 
       OMIT = Object.new
 
-      # @param meta [Ittybit::Media::MediaUpdateResponseMeta]
-      # @param data [Ittybit::Media::MediaUpdateResponseData]
-      # @param error [Ittybit::Media::MediaUpdateResponseError]
-      # @param links [Ittybit::Media::MediaUpdateResponseLinks]
+      # @param id [String]
+      # @param object [String]
+      # @param kind [Ittybit::Media::MediaUpdateResponseKind]
+      # @param title [String]
+      # @param alt [String]
+      # @param width [Integer]
+      # @param height [Integer]
+      # @param duration [Float]
+      # @param files [Array<Ittybit::Media::MediaUpdateResponseFilesItem>]
+      # @param urls [Hash{String => Object}]
+      # @param background [String]
+      # @param metadata [Hash{String => Object}]
+      # @param created [DateTime]
+      # @param updated [DateTime]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Ittybit::Media::MediaUpdateResponse]
-      def initialize(meta: OMIT, data: OMIT, error: OMIT, links: OMIT, additional_properties: nil)
-        @meta = meta if meta != OMIT
-        @data = data if data != OMIT
-        @error = error if error != OMIT
-        @links = links if links != OMIT
+      def initialize(id:, object:, files:, urls:, created:, updated:, kind: OMIT, title: OMIT, alt: OMIT, width: OMIT,
+                     height: OMIT, duration: OMIT, background: OMIT, metadata: OMIT, additional_properties: nil)
+        @id = id
+        @object = object
+        @kind = kind if kind != OMIT
+        @title = title if title != OMIT
+        @alt = alt if alt != OMIT
+        @width = width if width != OMIT
+        @height = height if height != OMIT
+        @duration = duration if duration != OMIT
+        @files = files
+        @urls = urls
+        @background = background if background != OMIT
+        @metadata = metadata if metadata != OMIT
+        @created = created
+        @updated = updated
         @additional_properties = additional_properties
-        @_field_set = { "meta": meta, "data": data, "error": error, "links": links }.reject do |_k, v|
+        @_field_set = {
+          "id": id,
+          "object": object,
+          "kind": kind,
+          "title": title,
+          "alt": alt,
+          "width": width,
+          "height": height,
+          "duration": duration,
+          "files": files,
+          "urls": urls,
+          "background": background,
+          "metadata": metadata,
+          "created": created,
+          "updated": updated
+        }.reject do |_k, v|
           v == OMIT
         end
       end
@@ -50,35 +105,38 @@ module Ittybit
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        if parsed_json["meta"].nil?
-          meta = nil
-        else
-          meta = parsed_json["meta"].to_json
-          meta = Ittybit::Media::MediaUpdateResponseMeta.from_json(json_object: meta)
+        id = parsed_json["id"]
+        object = parsed_json["object"]
+        kind = parsed_json["kind"]
+        title = parsed_json["title"]
+        alt = parsed_json["alt"]
+        width = parsed_json["width"]
+        height = parsed_json["height"]
+        duration = parsed_json["duration"]
+        files = parsed_json["files"]&.map do |item|
+          item = item.to_json
+          Ittybit::Media::MediaUpdateResponseFilesItem.from_json(json_object: item)
         end
-        if parsed_json["data"].nil?
-          data = nil
-        else
-          data = parsed_json["data"].to_json
-          data = Ittybit::Media::MediaUpdateResponseData.from_json(json_object: data)
-        end
-        if parsed_json["error"].nil?
-          error = nil
-        else
-          error = parsed_json["error"].to_json
-          error = Ittybit::Media::MediaUpdateResponseError.from_json(json_object: error)
-        end
-        if parsed_json["links"].nil?
-          links = nil
-        else
-          links = parsed_json["links"].to_json
-          links = Ittybit::Media::MediaUpdateResponseLinks.from_json(json_object: links)
-        end
+        urls = parsed_json["urls"]
+        background = parsed_json["background"]
+        metadata = parsed_json["metadata"]
+        created = (DateTime.parse(parsed_json["created"]) unless parsed_json["created"].nil?)
+        updated = (DateTime.parse(parsed_json["updated"]) unless parsed_json["updated"].nil?)
         new(
-          meta: meta,
-          data: data,
-          error: error,
-          links: links,
+          id: id,
+          object: object,
+          kind: kind,
+          title: title,
+          alt: alt,
+          width: width,
+          height: height,
+          duration: duration,
+          files: files,
+          urls: urls,
+          background: background,
+          metadata: metadata,
+          created: created,
+          updated: updated,
           additional_properties: struct
         )
       end
@@ -97,10 +155,20 @@ module Ittybit
       # @param obj [Object]
       # @return [Void]
       def self.validate_raw(obj:)
-        obj.meta.nil? || Ittybit::Media::MediaUpdateResponseMeta.validate_raw(obj: obj.meta)
-        obj.data.nil? || Ittybit::Media::MediaUpdateResponseData.validate_raw(obj: obj.data)
-        obj.error.nil? || Ittybit::Media::MediaUpdateResponseError.validate_raw(obj: obj.error)
-        obj.links.nil? || Ittybit::Media::MediaUpdateResponseLinks.validate_raw(obj: obj.links)
+        obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
+        obj.object.is_a?(String) != false || raise("Passed value for field obj.object is not the expected type, validation failed.")
+        obj.kind&.is_a?(Ittybit::Media::MediaUpdateResponseKind) != false || raise("Passed value for field obj.kind is not the expected type, validation failed.")
+        obj.title&.is_a?(String) != false || raise("Passed value for field obj.title is not the expected type, validation failed.")
+        obj.alt&.is_a?(String) != false || raise("Passed value for field obj.alt is not the expected type, validation failed.")
+        obj.width&.is_a?(Integer) != false || raise("Passed value for field obj.width is not the expected type, validation failed.")
+        obj.height&.is_a?(Integer) != false || raise("Passed value for field obj.height is not the expected type, validation failed.")
+        obj.duration&.is_a?(Float) != false || raise("Passed value for field obj.duration is not the expected type, validation failed.")
+        obj.files.is_a?(Array) != false || raise("Passed value for field obj.files is not the expected type, validation failed.")
+        obj.urls.is_a?(Hash) != false || raise("Passed value for field obj.urls is not the expected type, validation failed.")
+        obj.background&.is_a?(String) != false || raise("Passed value for field obj.background is not the expected type, validation failed.")
+        obj.metadata&.is_a?(Hash) != false || raise("Passed value for field obj.metadata is not the expected type, validation failed.")
+        obj.created.is_a?(DateTime) != false || raise("Passed value for field obj.created is not the expected type, validation failed.")
+        obj.updated.is_a?(DateTime) != false || raise("Passed value for field obj.updated is not the expected type, validation failed.")
       end
     end
   end

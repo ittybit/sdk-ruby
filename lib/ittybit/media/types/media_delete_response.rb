@@ -1,23 +1,13 @@
 # frozen_string_literal: true
 
-require_relative "media_delete_response_meta"
-require_relative "media_delete_response_data"
-require_relative "media_delete_response_error"
-require_relative "media_delete_response_links"
 require "ostruct"
 require "json"
 
 module Ittybit
   class Media
     class MediaDeleteResponse
-      # @return [Ittybit::Media::MediaDeleteResponseMeta]
-      attr_reader :meta
-      # @return [Ittybit::Media::MediaDeleteResponseData]
-      attr_reader :data
-      # @return [Ittybit::Media::MediaDeleteResponseError]
-      attr_reader :error
-      # @return [Ittybit::Media::MediaDeleteResponseLinks]
-      attr_reader :links
+      # @return [String]
+      attr_reader :message
       # @return [OpenStruct] Additional properties unmapped to the current class definition
       attr_reader :additional_properties
       # @return [Object]
@@ -26,19 +16,13 @@ module Ittybit
 
       OMIT = Object.new
 
-      # @param meta [Ittybit::Media::MediaDeleteResponseMeta]
-      # @param data [Ittybit::Media::MediaDeleteResponseData]
-      # @param error [Ittybit::Media::MediaDeleteResponseError]
-      # @param links [Ittybit::Media::MediaDeleteResponseLinks]
+      # @param message [String]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Ittybit::Media::MediaDeleteResponse]
-      def initialize(meta: OMIT, data: OMIT, error: OMIT, links: OMIT, additional_properties: nil)
-        @meta = meta if meta != OMIT
-        @data = data if data != OMIT
-        @error = error if error != OMIT
-        @links = links if links != OMIT
+      def initialize(message: OMIT, additional_properties: nil)
+        @message = message if message != OMIT
         @additional_properties = additional_properties
-        @_field_set = { "meta": meta, "data": data, "error": error, "links": links }.reject do |_k, v|
+        @_field_set = { "message": message }.reject do |_k, v|
           v == OMIT
         end
       end
@@ -50,37 +34,8 @@ module Ittybit
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        if parsed_json["meta"].nil?
-          meta = nil
-        else
-          meta = parsed_json["meta"].to_json
-          meta = Ittybit::Media::MediaDeleteResponseMeta.from_json(json_object: meta)
-        end
-        if parsed_json["data"].nil?
-          data = nil
-        else
-          data = parsed_json["data"].to_json
-          data = Ittybit::Media::MediaDeleteResponseData.from_json(json_object: data)
-        end
-        if parsed_json["error"].nil?
-          error = nil
-        else
-          error = parsed_json["error"].to_json
-          error = Ittybit::Media::MediaDeleteResponseError.from_json(json_object: error)
-        end
-        if parsed_json["links"].nil?
-          links = nil
-        else
-          links = parsed_json["links"].to_json
-          links = Ittybit::Media::MediaDeleteResponseLinks.from_json(json_object: links)
-        end
-        new(
-          meta: meta,
-          data: data,
-          error: error,
-          links: links,
-          additional_properties: struct
-        )
+        message = parsed_json["message"]
+        new(message: message, additional_properties: struct)
       end
 
       # Serialize an instance of MediaDeleteResponse to a JSON object
@@ -97,10 +52,7 @@ module Ittybit
       # @param obj [Object]
       # @return [Void]
       def self.validate_raw(obj:)
-        obj.meta.nil? || Ittybit::Media::MediaDeleteResponseMeta.validate_raw(obj: obj.meta)
-        obj.data.nil? || Ittybit::Media::MediaDeleteResponseData.validate_raw(obj: obj.data)
-        obj.error.nil? || Ittybit::Media::MediaDeleteResponseError.validate_raw(obj: obj.error)
-        obj.links.nil? || Ittybit::Media::MediaDeleteResponseLinks.validate_raw(obj: obj.links)
+        obj.message&.is_a?(String) != false || raise("Passed value for field obj.message is not the expected type, validation failed.")
       end
     end
   end

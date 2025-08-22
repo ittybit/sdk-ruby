@@ -1,22 +1,44 @@
 # frozen_string_literal: true
 
-require_relative "task_response_meta"
-require_relative "task_response_data"
-require_relative "task_response_error"
-require_relative "task_response_links"
+require_relative "task_response_kind"
+require_relative "task_response_status"
+require "date"
+require_relative "task_response_results"
 require "ostruct"
 require "json"
 
 module Ittybit
   class TaskResponse
-    # @return [Ittybit::TaskResponseMeta]
-    attr_reader :meta
-    # @return [Ittybit::TaskResponseData]
-    attr_reader :data
-    # @return [Ittybit::TaskResponseError]
+    # @return [String]
+    attr_reader :id
+    # @return [String]
+    attr_reader :object
+    # @return [Ittybit::TaskResponseKind]
+    attr_reader :kind
+    # @return [Hash{String => Object}]
+    attr_reader :input
+    # @return [Hash{String => Object}]
+    attr_reader :options
+    # @return [Hash{String => Object}]
+    attr_reader :output
+    # @return [Ittybit::TaskResponseStatus]
+    attr_reader :status
+    # @return [Integer]
+    attr_reader :progress
+    # @return [String]
     attr_reader :error
-    # @return [Ittybit::TaskResponseLinks]
-    attr_reader :links
+    # @return [String]
+    attr_reader :created_by
+    # @return [DateTime]
+    attr_reader :created
+    # @return [DateTime]
+    attr_reader :updated
+    # @return [String]
+    attr_reader :parent_id
+    # @return [Array<Object>]
+    attr_reader :workflow
+    # @return [Ittybit::TaskResponseResults]
+    attr_reader :results
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -25,19 +47,58 @@ module Ittybit
 
     OMIT = Object.new
 
-    # @param meta [Ittybit::TaskResponseMeta]
-    # @param data [Ittybit::TaskResponseData]
-    # @param error [Ittybit::TaskResponseError]
-    # @param links [Ittybit::TaskResponseLinks]
+    # @param id [String]
+    # @param object [String]
+    # @param kind [Ittybit::TaskResponseKind]
+    # @param input [Hash{String => Object}]
+    # @param options [Hash{String => Object}]
+    # @param output [Hash{String => Object}]
+    # @param status [Ittybit::TaskResponseStatus]
+    # @param progress [Integer]
+    # @param error [String]
+    # @param created_by [String]
+    # @param created [DateTime]
+    # @param updated [DateTime]
+    # @param parent_id [String]
+    # @param workflow [Array<Object>]
+    # @param results [Ittybit::TaskResponseResults]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [Ittybit::TaskResponse]
-    def initialize(meta: OMIT, data: OMIT, error: OMIT, links: OMIT, additional_properties: nil)
-      @meta = meta if meta != OMIT
-      @data = data if data != OMIT
+    def initialize(id:, object:, kind:, status:, created:, updated:, input: OMIT, options: OMIT, output: OMIT, progress: OMIT, error: OMIT,
+                   created_by: OMIT, parent_id: OMIT, workflow: OMIT, results: OMIT, additional_properties: nil)
+      @id = id
+      @object = object
+      @kind = kind
+      @input = input if input != OMIT
+      @options = options if options != OMIT
+      @output = output if output != OMIT
+      @status = status
+      @progress = progress if progress != OMIT
       @error = error if error != OMIT
-      @links = links if links != OMIT
+      @created_by = created_by if created_by != OMIT
+      @created = created
+      @updated = updated
+      @parent_id = parent_id if parent_id != OMIT
+      @workflow = workflow if workflow != OMIT
+      @results = results if results != OMIT
       @additional_properties = additional_properties
-      @_field_set = { "meta": meta, "data": data, "error": error, "links": links }.reject do |_k, v|
+      @_field_set = {
+        "id": id,
+        "object": object,
+        "kind": kind,
+        "input": input,
+        "options": options,
+        "output": output,
+        "status": status,
+        "progress": progress,
+        "error": error,
+        "created_by": created_by,
+        "created": created,
+        "updated": updated,
+        "parent_id": parent_id,
+        "workflow": workflow,
+        "results": results
+      }.reject do |_k, v|
         v == OMIT
       end
     end
@@ -49,35 +110,42 @@ module Ittybit
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
-      if parsed_json["meta"].nil?
-        meta = nil
+      id = parsed_json["id"]
+      object = parsed_json["object"]
+      kind = parsed_json["kind"]
+      input = parsed_json["input"]
+      options = parsed_json["options"]
+      output = parsed_json["output"]
+      status = parsed_json["status"]
+      progress = parsed_json["progress"]
+      error = parsed_json["error"]
+      created_by = parsed_json["created_by"]
+      created = (DateTime.parse(parsed_json["created"]) unless parsed_json["created"].nil?)
+      updated = (DateTime.parse(parsed_json["updated"]) unless parsed_json["updated"].nil?)
+      parent_id = parsed_json["parent_id"]
+      workflow = parsed_json["workflow"]
+      if parsed_json["results"].nil?
+        results = nil
       else
-        meta = parsed_json["meta"].to_json
-        meta = Ittybit::TaskResponseMeta.from_json(json_object: meta)
-      end
-      if parsed_json["data"].nil?
-        data = nil
-      else
-        data = parsed_json["data"].to_json
-        data = Ittybit::TaskResponseData.from_json(json_object: data)
-      end
-      if parsed_json["error"].nil?
-        error = nil
-      else
-        error = parsed_json["error"].to_json
-        error = Ittybit::TaskResponseError.from_json(json_object: error)
-      end
-      if parsed_json["links"].nil?
-        links = nil
-      else
-        links = parsed_json["links"].to_json
-        links = Ittybit::TaskResponseLinks.from_json(json_object: links)
+        results = parsed_json["results"].to_json
+        results = Ittybit::TaskResponseResults.from_json(json_object: results)
       end
       new(
-        meta: meta,
-        data: data,
+        id: id,
+        object: object,
+        kind: kind,
+        input: input,
+        options: options,
+        output: output,
+        status: status,
+        progress: progress,
         error: error,
-        links: links,
+        created_by: created_by,
+        created: created,
+        updated: updated,
+        parent_id: parent_id,
+        workflow: workflow,
+        results: results,
         additional_properties: struct
       )
     end
@@ -96,10 +164,21 @@ module Ittybit
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.meta.nil? || Ittybit::TaskResponseMeta.validate_raw(obj: obj.meta)
-      obj.data.nil? || Ittybit::TaskResponseData.validate_raw(obj: obj.data)
-      obj.error.nil? || Ittybit::TaskResponseError.validate_raw(obj: obj.error)
-      obj.links.nil? || Ittybit::TaskResponseLinks.validate_raw(obj: obj.links)
+      obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
+      obj.object.is_a?(String) != false || raise("Passed value for field obj.object is not the expected type, validation failed.")
+      obj.kind.is_a?(Ittybit::TaskResponseKind) != false || raise("Passed value for field obj.kind is not the expected type, validation failed.")
+      obj.input&.is_a?(Hash) != false || raise("Passed value for field obj.input is not the expected type, validation failed.")
+      obj.options&.is_a?(Hash) != false || raise("Passed value for field obj.options is not the expected type, validation failed.")
+      obj.output&.is_a?(Hash) != false || raise("Passed value for field obj.output is not the expected type, validation failed.")
+      obj.status.is_a?(Ittybit::TaskResponseStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
+      obj.progress&.is_a?(Integer) != false || raise("Passed value for field obj.progress is not the expected type, validation failed.")
+      obj.error&.is_a?(String) != false || raise("Passed value for field obj.error is not the expected type, validation failed.")
+      obj.created_by&.is_a?(String) != false || raise("Passed value for field obj.created_by is not the expected type, validation failed.")
+      obj.created.is_a?(DateTime) != false || raise("Passed value for field obj.created is not the expected type, validation failed.")
+      obj.updated.is_a?(DateTime) != false || raise("Passed value for field obj.updated is not the expected type, validation failed.")
+      obj.parent_id&.is_a?(String) != false || raise("Passed value for field obj.parent_id is not the expected type, validation failed.")
+      obj.workflow&.is_a?(Array) != false || raise("Passed value for field obj.workflow is not the expected type, validation failed.")
+      obj.results.nil? || Ittybit::TaskResponseResults.validate_raw(obj: obj.results)
     end
   end
 end

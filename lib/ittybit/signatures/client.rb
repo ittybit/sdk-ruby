@@ -45,9 +45,10 @@ module Ittybit
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
-      **(req.headers || {}),
-      **@request_client.get_headers,
-      **(request_options&.additional_headers || {})
+          **(req.headers || {}),
+          **@request_client.get_headers,
+          **(request_options&.additional_headers || {}),
+          "Accept-Version": "2025-08-20"
         }.compact
         unless request_options.nil? || request_options&.additional_query_parameters.nil?
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
@@ -105,9 +106,10 @@ module Ittybit
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
-        **(req.headers || {}),
-        **@request_client.get_headers,
-        **(request_options&.additional_headers || {})
+            **(req.headers || {}),
+            **@request_client.get_headers,
+            **(request_options&.additional_headers || {}),
+            "Accept-Version": "2025-08-20"
           }.compact
           unless request_options.nil? || request_options&.additional_query_parameters.nil?
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact

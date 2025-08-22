@@ -1,23 +1,31 @@
 # frozen_string_literal: true
 
-require_relative "automations_get_response_meta"
-require_relative "automations_get_response_data"
-require_relative "automations_get_response_error"
-require_relative "automations_get_response_links"
+require_relative "automations_get_response_trigger"
+require_relative "automations_get_response_workflow_item"
+require_relative "automations_get_response_status"
+require "date"
 require "ostruct"
 require "json"
 
 module Ittybit
   class Automations
     class AutomationsGetResponse
-      # @return [Ittybit::Automations::AutomationsGetResponseMeta]
-      attr_reader :meta
-      # @return [Ittybit::Automations::AutomationsGetResponseData]
-      attr_reader :data
-      # @return [Ittybit::Automations::AutomationsGetResponseError]
-      attr_reader :error
-      # @return [Ittybit::Automations::AutomationsGetResponseLinks]
-      attr_reader :links
+      # @return [String]
+      attr_reader :id
+      # @return [String]
+      attr_reader :name
+      # @return [String]
+      attr_reader :description
+      # @return [Ittybit::Automations::AutomationsGetResponseTrigger]
+      attr_reader :trigger
+      # @return [Array<Ittybit::Automations::AutomationsGetResponseWorkflowItem>]
+      attr_reader :workflow
+      # @return [Ittybit::Automations::AutomationsGetResponseStatus]
+      attr_reader :status
+      # @return [DateTime]
+      attr_reader :created
+      # @return [DateTime]
+      attr_reader :updated
       # @return [OpenStruct] Additional properties unmapped to the current class definition
       attr_reader :additional_properties
       # @return [Object]
@@ -26,19 +34,37 @@ module Ittybit
 
       OMIT = Object.new
 
-      # @param meta [Ittybit::Automations::AutomationsGetResponseMeta]
-      # @param data [Ittybit::Automations::AutomationsGetResponseData]
-      # @param error [Ittybit::Automations::AutomationsGetResponseError]
-      # @param links [Ittybit::Automations::AutomationsGetResponseLinks]
+      # @param id [String]
+      # @param name [String]
+      # @param description [String]
+      # @param trigger [Ittybit::Automations::AutomationsGetResponseTrigger]
+      # @param workflow [Array<Ittybit::Automations::AutomationsGetResponseWorkflowItem>]
+      # @param status [Ittybit::Automations::AutomationsGetResponseStatus]
+      # @param created [DateTime]
+      # @param updated [DateTime]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Ittybit::Automations::AutomationsGetResponse]
-      def initialize(meta: OMIT, data: OMIT, error: OMIT, links: OMIT, additional_properties: nil)
-        @meta = meta if meta != OMIT
-        @data = data if data != OMIT
-        @error = error if error != OMIT
-        @links = links if links != OMIT
+      def initialize(id:, trigger:, workflow:, status:, created:, updated:, name: OMIT, description: OMIT,
+                     additional_properties: nil)
+        @id = id
+        @name = name if name != OMIT
+        @description = description if description != OMIT
+        @trigger = trigger
+        @workflow = workflow
+        @status = status
+        @created = created
+        @updated = updated
         @additional_properties = additional_properties
-        @_field_set = { "meta": meta, "data": data, "error": error, "links": links }.reject do |_k, v|
+        @_field_set = {
+          "id": id,
+          "name": name,
+          "description": description,
+          "trigger": trigger,
+          "workflow": workflow,
+          "status": status,
+          "created": created,
+          "updated": updated
+        }.reject do |_k, v|
           v == OMIT
         end
       end
@@ -50,35 +76,31 @@ module Ittybit
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        if parsed_json["meta"].nil?
-          meta = nil
+        id = parsed_json["id"]
+        name = parsed_json["name"]
+        description = parsed_json["description"]
+        if parsed_json["trigger"].nil?
+          trigger = nil
         else
-          meta = parsed_json["meta"].to_json
-          meta = Ittybit::Automations::AutomationsGetResponseMeta.from_json(json_object: meta)
+          trigger = parsed_json["trigger"].to_json
+          trigger = Ittybit::Automations::AutomationsGetResponseTrigger.from_json(json_object: trigger)
         end
-        if parsed_json["data"].nil?
-          data = nil
-        else
-          data = parsed_json["data"].to_json
-          data = Ittybit::Automations::AutomationsGetResponseData.from_json(json_object: data)
+        workflow = parsed_json["workflow"]&.map do |item|
+          item = item.to_json
+          Ittybit::Automations::AutomationsGetResponseWorkflowItem.from_json(json_object: item)
         end
-        if parsed_json["error"].nil?
-          error = nil
-        else
-          error = parsed_json["error"].to_json
-          error = Ittybit::Automations::AutomationsGetResponseError.from_json(json_object: error)
-        end
-        if parsed_json["links"].nil?
-          links = nil
-        else
-          links = parsed_json["links"].to_json
-          links = Ittybit::Automations::AutomationsGetResponseLinks.from_json(json_object: links)
-        end
+        status = parsed_json["status"]
+        created = (DateTime.parse(parsed_json["created"]) unless parsed_json["created"].nil?)
+        updated = (DateTime.parse(parsed_json["updated"]) unless parsed_json["updated"].nil?)
         new(
-          meta: meta,
-          data: data,
-          error: error,
-          links: links,
+          id: id,
+          name: name,
+          description: description,
+          trigger: trigger,
+          workflow: workflow,
+          status: status,
+          created: created,
+          updated: updated,
           additional_properties: struct
         )
       end
@@ -97,10 +119,14 @@ module Ittybit
       # @param obj [Object]
       # @return [Void]
       def self.validate_raw(obj:)
-        obj.meta.nil? || Ittybit::Automations::AutomationsGetResponseMeta.validate_raw(obj: obj.meta)
-        obj.data.nil? || Ittybit::Automations::AutomationsGetResponseData.validate_raw(obj: obj.data)
-        obj.error.nil? || Ittybit::Automations::AutomationsGetResponseError.validate_raw(obj: obj.error)
-        obj.links.nil? || Ittybit::Automations::AutomationsGetResponseLinks.validate_raw(obj: obj.links)
+        obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
+        obj.name&.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
+        obj.description&.is_a?(String) != false || raise("Passed value for field obj.description is not the expected type, validation failed.")
+        Ittybit::Automations::AutomationsGetResponseTrigger.validate_raw(obj: obj.trigger)
+        obj.workflow.is_a?(Array) != false || raise("Passed value for field obj.workflow is not the expected type, validation failed.")
+        obj.status.is_a?(Ittybit::Automations::AutomationsGetResponseStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
+        obj.created.is_a?(DateTime) != false || raise("Passed value for field obj.created is not the expected type, validation failed.")
+        obj.updated.is_a?(DateTime) != false || raise("Passed value for field obj.updated is not the expected type, validation failed.")
       end
     end
   end

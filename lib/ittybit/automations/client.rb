@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require_relative "../../requests"
-require_relative "types/automations_list_response"
+require_relative "types/automations_list_response_item"
+require "json"
 require_relative "types/automations_create_request_trigger"
 require_relative "types/automations_create_request_workflow_item"
 require_relative "types/automations_create_request_status"
@@ -30,7 +31,7 @@ module Ittybit
     # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::Automations::AutomationsListResponse]
+    # @return [Array<Ittybit::Automations::AutomationsListResponseItem>]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -44,9 +45,10 @@ module Ittybit
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
-      **(req.headers || {}),
-      **@request_client.get_headers,
-      **(request_options&.additional_headers || {})
+          **(req.headers || {}),
+          **@request_client.get_headers,
+          **(request_options&.additional_headers || {}),
+          "Accept-Version": "2025-08-20"
         }.compact
         req.params = { **(request_options&.additional_query_parameters || {}), "page": page, "limit": limit }.compact
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
@@ -54,7 +56,11 @@ module Ittybit
         end
         req.url "#{@request_client.get_url(request_options: request_options)}/automations"
       end
-      Ittybit::Automations::AutomationsListResponse.from_json(json_object: response.body)
+      parsed_json = JSON.parse(response.body)
+      parsed_json&.map do |item|
+        item = item.to_json
+        Ittybit::Automations::AutomationsListResponseItem.from_json(json_object: item)
+      end
     end
 
     # Creates a new automation.
@@ -128,9 +134,10 @@ module Ittybit
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
-      **(req.headers || {}),
-      **@request_client.get_headers,
-      **(request_options&.additional_headers || {})
+          **(req.headers || {}),
+          **@request_client.get_headers,
+          **(request_options&.additional_headers || {}),
+          "Accept-Version": "2025-08-20"
         }.compact
         unless request_options.nil? || request_options&.additional_query_parameters.nil?
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
@@ -161,9 +168,10 @@ module Ittybit
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
-      **(req.headers || {}),
-      **@request_client.get_headers,
-      **(request_options&.additional_headers || {})
+          **(req.headers || {}),
+          **@request_client.get_headers,
+          **(request_options&.additional_headers || {}),
+          "Accept-Version": "2025-08-20"
         }.compact
         unless request_options.nil? || request_options&.additional_query_parameters.nil?
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
@@ -210,9 +218,10 @@ module Ittybit
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
         req.headers = {
-      **(req.headers || {}),
-      **@request_client.get_headers,
-      **(request_options&.additional_headers || {})
+          **(req.headers || {}),
+          **@request_client.get_headers,
+          **(request_options&.additional_headers || {}),
+          "Accept-Version": "2025-08-20"
         }.compact
         unless request_options.nil? || request_options&.additional_query_parameters.nil?
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
@@ -246,7 +255,7 @@ module Ittybit
     # @param page [Integer]
     # @param limit [Integer]
     # @param request_options [Ittybit::RequestOptions]
-    # @return [Ittybit::Automations::AutomationsListResponse]
+    # @return [Array<Ittybit::Automations::AutomationsListResponseItem>]
     # @example
     #  api = Ittybit::Client.new(
     #    base_url: "https://api.example.com",
@@ -261,9 +270,10 @@ module Ittybit
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
-        **(req.headers || {}),
-        **@request_client.get_headers,
-        **(request_options&.additional_headers || {})
+            **(req.headers || {}),
+            **@request_client.get_headers,
+            **(request_options&.additional_headers || {}),
+            "Accept-Version": "2025-08-20"
           }.compact
           req.params = { **(request_options&.additional_query_parameters || {}), "page": page, "limit": limit }.compact
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
@@ -271,7 +281,11 @@ module Ittybit
           end
           req.url "#{@request_client.get_url(request_options: request_options)}/automations"
         end
-        Ittybit::Automations::AutomationsListResponse.from_json(json_object: response.body)
+        parsed_json = JSON.parse(response.body)
+        parsed_json&.map do |item|
+          item = item.to_json
+          Ittybit::Automations::AutomationsListResponseItem.from_json(json_object: item)
+        end
       end
     end
 
@@ -349,9 +363,10 @@ module Ittybit
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
-        **(req.headers || {}),
-        **@request_client.get_headers,
-        **(request_options&.additional_headers || {})
+            **(req.headers || {}),
+            **@request_client.get_headers,
+            **(request_options&.additional_headers || {}),
+            "Accept-Version": "2025-08-20"
           }.compact
           unless request_options.nil? || request_options&.additional_query_parameters.nil?
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
@@ -384,9 +399,10 @@ module Ittybit
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
-        **(req.headers || {}),
-        **@request_client.get_headers,
-        **(request_options&.additional_headers || {})
+            **(req.headers || {}),
+            **@request_client.get_headers,
+            **(request_options&.additional_headers || {}),
+            "Accept-Version": "2025-08-20"
           }.compact
           unless request_options.nil? || request_options&.additional_query_parameters.nil?
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
@@ -435,9 +451,10 @@ module Ittybit
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers["ACCEPT_VERSION"] = request_options.version unless request_options&.version.nil?
           req.headers = {
-        **(req.headers || {}),
-        **@request_client.get_headers,
-        **(request_options&.additional_headers || {})
+            **(req.headers || {}),
+            **@request_client.get_headers,
+            **(request_options&.additional_headers || {}),
+            "Accept-Version": "2025-08-20"
           }.compact
           unless request_options.nil? || request_options&.additional_query_parameters.nil?
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact

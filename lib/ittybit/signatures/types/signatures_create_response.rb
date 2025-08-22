@@ -1,23 +1,25 @@
 # frozen_string_literal: true
 
-require_relative "signatures_create_response_meta"
-require_relative "signatures_create_response_data"
-require_relative "signatures_create_response_error"
-require_relative "signatures_create_response_links"
 require "ostruct"
 require "json"
 
 module Ittybit
   class Signatures
     class SignaturesCreateResponse
-      # @return [Ittybit::Signatures::SignaturesCreateResponseMeta]
-      attr_reader :meta
-      # @return [Ittybit::Signatures::SignaturesCreateResponseData]
-      attr_reader :data
-      # @return [Ittybit::Signatures::SignaturesCreateResponseError]
-      attr_reader :error
-      # @return [Ittybit::Signatures::SignaturesCreateResponseLinks]
-      attr_reader :links
+      # @return [String]
+      attr_reader :domain
+      # @return [String]
+      attr_reader :filename
+      # @return [String]
+      attr_reader :folder
+      # @return [Integer]
+      attr_reader :expiry
+      # @return [String]
+      attr_reader :method
+      # @return [String]
+      attr_reader :signature
+      # @return [String]
+      attr_reader :url
       # @return [OpenStruct] Additional properties unmapped to the current class definition
       attr_reader :additional_properties
       # @return [Object]
@@ -26,19 +28,33 @@ module Ittybit
 
       OMIT = Object.new
 
-      # @param meta [Ittybit::Signatures::SignaturesCreateResponseMeta]
-      # @param data [Ittybit::Signatures::SignaturesCreateResponseData]
-      # @param error [Ittybit::Signatures::SignaturesCreateResponseError]
-      # @param links [Ittybit::Signatures::SignaturesCreateResponseLinks]
+      # @param domain [String]
+      # @param filename [String]
+      # @param folder [String]
+      # @param expiry [Integer]
+      # @param method [String]
+      # @param signature [String]
+      # @param url [String]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Ittybit::Signatures::SignaturesCreateResponse]
-      def initialize(meta: OMIT, data: OMIT, error: OMIT, links: OMIT, additional_properties: nil)
-        @meta = meta if meta != OMIT
-        @data = data if data != OMIT
-        @error = error if error != OMIT
-        @links = links if links != OMIT
+      def initialize(domain:, filename:, expiry:, method:, signature:, url:, folder: OMIT, additional_properties: nil)
+        @domain = domain
+        @filename = filename
+        @folder = folder if folder != OMIT
+        @expiry = expiry
+        @method = method
+        @signature = signature
+        @url = url
         @additional_properties = additional_properties
-        @_field_set = { "meta": meta, "data": data, "error": error, "links": links }.reject do |_k, v|
+        @_field_set = {
+          "domain": domain,
+          "filename": filename,
+          "folder": folder,
+          "expiry": expiry,
+          "method": method,
+          "signature": signature,
+          "url": url
+        }.reject do |_k, v|
           v == OMIT
         end
       end
@@ -50,35 +66,21 @@ module Ittybit
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        if parsed_json["meta"].nil?
-          meta = nil
-        else
-          meta = parsed_json["meta"].to_json
-          meta = Ittybit::Signatures::SignaturesCreateResponseMeta.from_json(json_object: meta)
-        end
-        if parsed_json["data"].nil?
-          data = nil
-        else
-          data = parsed_json["data"].to_json
-          data = Ittybit::Signatures::SignaturesCreateResponseData.from_json(json_object: data)
-        end
-        if parsed_json["error"].nil?
-          error = nil
-        else
-          error = parsed_json["error"].to_json
-          error = Ittybit::Signatures::SignaturesCreateResponseError.from_json(json_object: error)
-        end
-        if parsed_json["links"].nil?
-          links = nil
-        else
-          links = parsed_json["links"].to_json
-          links = Ittybit::Signatures::SignaturesCreateResponseLinks.from_json(json_object: links)
-        end
+        domain = parsed_json["domain"]
+        filename = parsed_json["filename"]
+        folder = parsed_json["folder"]
+        expiry = parsed_json["expiry"]
+        method = parsed_json["method"]
+        signature = parsed_json["signature"]
+        url = parsed_json["url"]
         new(
-          meta: meta,
-          data: data,
-          error: error,
-          links: links,
+          domain: domain,
+          filename: filename,
+          folder: folder,
+          expiry: expiry,
+          method: method,
+          signature: signature,
+          url: url,
           additional_properties: struct
         )
       end
@@ -97,10 +99,13 @@ module Ittybit
       # @param obj [Object]
       # @return [Void]
       def self.validate_raw(obj:)
-        obj.meta.nil? || Ittybit::Signatures::SignaturesCreateResponseMeta.validate_raw(obj: obj.meta)
-        obj.data.nil? || Ittybit::Signatures::SignaturesCreateResponseData.validate_raw(obj: obj.data)
-        obj.error.nil? || Ittybit::Signatures::SignaturesCreateResponseError.validate_raw(obj: obj.error)
-        obj.links.nil? || Ittybit::Signatures::SignaturesCreateResponseLinks.validate_raw(obj: obj.links)
+        obj.domain.is_a?(String) != false || raise("Passed value for field obj.domain is not the expected type, validation failed.")
+        obj.filename.is_a?(String) != false || raise("Passed value for field obj.filename is not the expected type, validation failed.")
+        obj.folder&.is_a?(String) != false || raise("Passed value for field obj.folder is not the expected type, validation failed.")
+        obj.expiry.is_a?(Integer) != false || raise("Passed value for field obj.expiry is not the expected type, validation failed.")
+        obj.method.is_a?(String) != false || raise("Passed value for field obj.method is not the expected type, validation failed.")
+        obj.signature.is_a?(String) != false || raise("Passed value for field obj.signature is not the expected type, validation failed.")
+        obj.url.is_a?(String) != false || raise("Passed value for field obj.url is not the expected type, validation failed.")
       end
     end
   end
